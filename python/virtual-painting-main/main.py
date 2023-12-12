@@ -1,8 +1,16 @@
 import cv2
 import numpy as np
+import tkinter as tk
+
+# Get screen size
+root = tk.Tk()
+screensize = root.winfo_screenwidth(), root.winfo_screenheight()
+root.destroy()
+
 
 circle_sensitivity = 50  # adjust this value for circle sensitivity, lower values make it more sensitive
 dark_color_sensitivity = 170  # adjust this value for dark color sensitivity
+
 
 def detect_dark_color(frame):
     """
@@ -58,6 +66,10 @@ while True:
 
     # Detect dark colors
     dark_contours = detect_dark_color(frame)
+
+    ratio = screensize[1] / frame.shape[0]
+    dim = (int(frame.shape[1] * ratio), int(screensize[1]))
+    frame = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
 
     # Draw a white circle at the top left with adjustable sensitivity
     draw_circle(frame, circle_center_top_left, circle_radius_small, (255, 255, 255))
