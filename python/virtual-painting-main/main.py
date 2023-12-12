@@ -1,103 +1,96 @@
 import cv2
-import time
 import numpy as np
 
+circle_sensitivity = 50  # adjust this value for circle sensitivity, lower values make it more sensitive
+dark_color_sensitivity = 170  # adjust this value for dark color sensitivity
 
-def detect_color(frame, color):
+def detect_dark_color(frame):
     """
-    Detects a specified color in a frame and returns the masked frame.
+    Detects dark colors in a frame.
     """
     frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
+    # Define the lower and upper bounds for dark colors (black)
+    lower_bound = np.array([0, 0, 0])
+    upper_bound = np.array([179, 255, dark_color_sensitivity])
 
-    lower = np.array(color[0:3])
-    upper = np.array(color[3:6])
+    # Create a mask for dark colors
+    mask = cv2.inRange(frame_hsv, lower_bound, upper_bound)
+    dark_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    mask = cv2.inRange(frame_hsv, lower, upper)
-    masked_frame = cv2.bitwise_and(frame, frame, mask=mask)
+    return dark_contours
 
-    return masked_frame
-
-
-def find_contours(masked_frame):
+def draw_circle(frame, center, radius, color):
     """
-    Finds contours in a masked frame and returns a list of contours.
+    Draws a filled circle on the frame.
     """
-    frame_gray = cv2.cvtColor(masked_frame, cv2.COLOR_BGR2GRAY)
-    frame_blur = cv2.GaussianBlur(frame_gray, (7, 7), 1)
-    frame_edges = cv2.Canny(frame_blur, 50, 50)
+    cv2.circle(frame, center, radius, color, thickness=cv2.FILLED)
 
-    contours, _ = cv2.findContours(frame_edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-
-    return contours
-
-
-def find_shape_center(contour):
+def draw_bordered_rectangle(frame, center, size, border_thickness, color):
     """
-    Finds the shape of a contour and returns the number of corners and the bounding rectangle.
+    Draws a bordered rectangle on the frame.
     """
-    area = cv2.contourArea(contour)
+    x, y = center
+    half_size = int(size / 2)
+    cv2.rectangle(frame, (x - half_size, y - half_size), (x + half_size, y + half_size), color, thickness=border_thickness)
 
-    if area > 50: # and area < 350
-        x, y, width, height = cv2.boundingRect(contour)
-        center_x, center_y = int(x + (width / 2)), int(y + (height / 2))
-
-        return center_x, center_y
-
-    return None, None
-
-
-def draw_points(frame, point):
-    """
-    Draws a point on a frame.
-    """
-    colors_to_draw = [
-        # BLUE
-        (255, 0, 0),
-        # YELLOW
-        (0, 255, 255)]
-
-    cv2.circle(frame, [point[0], point[1]], 10, colors_to_draw[point[2]], cv2.FILLED)
-
-
-points = [] 
-
-colors_to_detect = [ 
-    # BLUE
-   [ 80, 167, 0, 132, 255, 255],
-    # YELLOW
-    [24,86, 194, 65, 234, 255]
-]
-
+# Video capture setup
 video_capture = cv2.VideoCapture(0)
-
 width, height = 640, 480
-brightness = 0
-
 video_capture.set(3, width)
 video_capture.set(4, height)
 
+# Circle parameters
+circle_radius_small = 20
+circle_radius_large = 50
+
+# Rectangle parameters
+rectangle_size = min(width, height) - 20  # 20 pixels smaller than the window size
+rectangle_border_thickness = 2
+rectangle_center = (int(width / 2), int(height / 2))
+
+# Circle positions
+circle_center_top_left = (circle_radius_large, circle_radius_large)
+circle_center_top_right = (width - circle_radius_large, circle_radius_large)
 
 while True:
-    success, frame = video_capture.read()    
+    success, frame = video_capture.read()
 
-    for color in colors_to_detect:
-        masked_frame = detect_color(frame, color)
-        contours = find_contours(masked_frame)
-        for contour in contours:
-            x, y = find_shape_center(contour)
-            if x is not None or y is not None :
-                points.append([x, y, colors_to_detect.index(color)])
-    if len(points) != 0:
-        for point in points:
-            draw_points(frame,point)
-    
+    # Detect dark colors
+    dark_contours = detect_dark_color(frame)
+
+    # Draw a white circle at the top left with adjustable sensitivity
+    draw_circle(frame, circle_center_top_left, circle_radius_small, (255, 255, 255))
+
+    # Draw a white circle at the top right with adjustable sensitivity
+    draw_circle(frame, circle_center_top_right, circle_radius_small, (255, 255, 255))
+
+    # Draw a bordered rectangle with black borders, centered
+    draw_bordered_rectangle(frame, rectangle_center, rectangle_size, rectangle_border_thickness, (0, 0, 0))
+
+    # Draw contours in yellow for debugging
+    # cv2.drawContours(frame, dark_contours, -1, (0, 255, 255), 2)
+
+    # Check if dark colors are detected inside the circles with adjustable sensitivity
+    for contour in dark_contours:
+        M = cv2.moments(contour)
+        if M["m00"] > 0:
+            cx = int(M["m10"] / M["m00"])
+            cy = int(M["m01"] / M["m00"])
+            
+            # Check if inside the top-left circle with adjustable sensitivity
+            if circle_center_top_left[0] - circle_sensitivity < cx < circle_center_top_left[0] + circle_sensitivity and \
+                    circle_center_top_left[1] - circle_sensitivity < cy < circle_center_top_left[1] + circle_sensitivity:
+                draw_circle(frame, circle_center_top_left, circle_radius_small, (0, 0, 255))
+            
+            # Check if inside the top-right circle with adjustable sensitivity
+            elif circle_center_top_right[0] - circle_sensitivity < cx < circle_center_top_right[0] + circle_sensitivity and \
+                    circle_center_top_right[1] - circle_sensitivity < cy < circle_center_top_right[1] + circle_sensitivity:
+                draw_circle(frame, circle_center_top_right, circle_radius_small, (0, 0, 255))
+
     frame_h = cv2.flip(frame, 1)
-
     cv2.imshow("Result", frame_h)
-    if cv2.waitKey(1) == ord('q'):
-        # quit
-        break
-    elif cv2.waitKey(1) == ord('c'):
-        # clean marker
-        points = []
 
+    if cv2.waitKey(1) == ord('q'):
+        # Quit
+        break
