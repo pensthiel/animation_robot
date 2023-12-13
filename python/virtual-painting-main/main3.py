@@ -37,7 +37,8 @@ frame_number = 0
 if not os.path.exists('frames'):
     os.makedirs('frames')
 
-# Function to save the frame
+
+    # Function to save the frame
 def save_frame(image, directory='frames', prefix='frame', file_format='jpg'):
     global frame_number  # Declare frame_number as global to modify it
     filename = f"{prefix}_{frame_number}.{file_format}"
@@ -52,41 +53,56 @@ def store_frame(image, prefix='preview_frame', file_format='jpg'):
     cv2.imwrite(filename, image)
     print(f"Saved: {filename}")
 
+# Function to capture and return a frame from the camera
+def capture_frame():
+    ret, frame = cap.read()
+    if ret:
+        frame = cv2.resize(frame, (new_width, height))
+        return frame
+    else:
+        print("Failed to capture frame")
+        return None
+
 try:
     while True:
-        ret, frame = cap.read()
-        frame = cv2.resize(frame, (new_width, height))
-        if not ret:
-            print("Error capturing the frame.")
-            break
+        # Attempt to load the image
+        image_path = 'preview_frame.jpg'
+        image_loaded = False
+        if os.path.exists(image_path):
+            try:
+                image = pygame.image.load(image_path)
+                image = pygame.transform.scale(image, (new_width, height))
+                screen.blit(image, (0, 0))
+                pygame.display.flip()
+                image_loaded = True
+            except Exception as e:
+                print(f"Failed to load image: {e}")
 
-        # Convert the OpenCV frame to Pygame surface
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img = pygame.surfarray.make_surface(img.swapaxes(0, 1))
-
-        # Display the image on the screen
-        screen.blit(img, (0, 0))
-        pygame.display.flip()
+        # If the image is not loaded, capture a new frame
+        if not image_loaded:
+            frame = capture_frame()
+            if frame is not None:
+                img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = pygame.surfarray.make_surface(img.swapaxes(0, 1))
+                screen.blit(img, (0, 0))
+                pygame.display.flip()
 
         # Handle events
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_q):
-                pygame.quit()
-                cap.release()
-                exit()
+                raise StopIteration  # Break out of the loop
 
             # Check for 'y' key press to save the frame
             if event.type == KEYDOWN and event.key == K_y:
-                save_frame(frame)  # Save the frame with an auto-incremented number
-                store_frame(frame)  # Save the preview frame with a fixed name
+                frame = capture_frame()
+                if frame is not None:
+                    save_frame(frame)  # Save the frame with an auto-incremented number
+                    store_frame(frame)  # Save the preview frame with a fixed name
 
-            # Check for 'q' key press
-            keys = pygame.key.get_pressed()
-            if keys[K_q]:
-                pygame.quit()
-                cap.release()
-                exit()
+except StopIteration:
+    pass  # Exit the loop when 'q' is pressed or the window is closed
 
 finally:
     # Release resources
+    pygame.quit()
     cap.release()

@@ -2,6 +2,7 @@ import cv2
 import pygame
 from pygame.locals import *
 import os
+import time
 
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -52,41 +53,53 @@ def store_frame(image, prefix='preview_frame', file_format='jpg'):
     cv2.imwrite(filename, image)
     print(f"Saved: {filename}")
 
+def play_vid(frame):
+    frame = cv2.resize(frame, (new_width, height))
+    img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    img = pygame.surfarray.make_surface(img.swapaxes(0, 1))
+    screen.blit(img, (0, 0))
+    pygame.display.flip()
+
 try:
     while True:
-        ret, frame = cap.read()
-        frame = cv2.resize(frame, (new_width, height))
-        if not ret:
-            print("Error capturing the frame.")
-            break
+        
+        # Attempt to load the image
+        image_path = 'preview_frame.jpg'
+        image_loaded = False
+        if os.path.exists(image_path):
+            try:
+                image = pygame.image.load(image_path)
+                image = pygame.transform.scale(image, (new_width, height))
+                screen.blit(image, (0, 0))
+                pygame.display.flip()
+                image_loaded = True
+            except Exception as e:
+                print(f"Failed to load image: {e}")
 
-        # Convert the OpenCV frame to Pygame surface
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img = pygame.surfarray.make_surface(img.swapaxes(0, 1))
-
-        # Display the image on the screen
-        screen.blit(img, (0, 0))
-        pygame.display.flip()
+        # If the image is not loaded, capture a new frame
+        if not image_loaded:
+            ret, frame = cap.read()
+            if frame is not None:
+                play_vid()
 
         # Handle events
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_q):
-                pygame.quit()
-                cap.release()
-                exit()
+                raise StopIteration  # Break out of the loop
 
             # Check for 'y' key press to save the frame
             if event.type == KEYDOWN and event.key == K_y:
+                ret, frame = cap.read()
+                play_vid(frame)
                 save_frame(frame)  # Save the frame with an auto-incremented number
                 store_frame(frame)  # Save the preview frame with a fixed name
+                time.sleep(3)  # Adds a delay of 'number_of_seconds'
+                
 
-            # Check for 'q' key press
-            keys = pygame.key.get_pressed()
-            if keys[K_q]:
-                pygame.quit()
-                cap.release()
-                exit()
+except StopIteration:
+    pass  # Exit the loop when 'q' is pressed or the window is closed
 
 finally:
     # Release resources
+    pygame.quit()
     cap.release()
