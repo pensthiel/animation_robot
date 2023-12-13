@@ -41,9 +41,10 @@ print(f"Random integer between 1 and 1000: {rand_int}")
 # Create 'frames' directory if it doesn't exist
 
 os.makedirs(f"frames{rand_int}")
+frames_d = (f"frames{rand_int}")
 
 # Function to save the frame
-def save_frame(image, directory='frames{rand_int}', prefix='frame', file_format='jpg'):
+def save_frame(image, directory= frames_d , prefix='frame', file_format='jpg'):
     global frame_number  # Declare frame_number as global to modify it
     filename = f"{prefix}_{frame_number}.{file_format}"
     filepath = os.path.join(directory, filename)
@@ -67,7 +68,7 @@ def play_vid(frame):
 try:
     while True:
 
-        time.sleep(0.1)
+        time.sleep(0.05)
         # Attempt to load the image
         image_path = 'preview_frame.jpg'
         image_loaded = False
@@ -84,8 +85,7 @@ try:
         # If the image is not loaded, capture a new frame
         if not image_loaded:
             ret, frame = cap.read()
-            if frame is not None:
-                play_vid()
+            play_vid(frame)
 
         # Handle events
         for event in pygame.event.get():
@@ -94,14 +94,14 @@ try:
 
             # Check for 'y' key press to save the frame
             if event.type == KEYDOWN and event.key == K_y:
-                pygame.mixer.init()
-                pygame.mixer.music.load('miaou.mp3')
-                pygame.mixer.music.play()
                 ret, frame = cap.read()
                 play_vid(frame)
                 save_frame(frame)  # Save the frame with an auto-incremented number
                 store_frame(frame)  # Save the preview frame with a fixed name
-                time.sleep(1)
+                pygame.mixer.init()
+                pygame.mixer.music.load('miaou.mp3')
+                pygame.mixer.music.play()
+
 
 
                 
