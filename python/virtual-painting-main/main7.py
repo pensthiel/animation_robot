@@ -68,8 +68,8 @@ def play_vid(frame):
 
 try:
     while True:
-        print("0.2 pause")
-        time.sleep(0.2)
+        print("0.5 pause")
+        time.sleep(0.5)
         image_path = frame_to_display
         print("found image")
         image_loaded = False
