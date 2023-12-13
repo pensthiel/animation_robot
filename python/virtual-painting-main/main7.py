@@ -64,20 +64,27 @@ def play_vid(frame):
     img = pygame.surfarray.make_surface(img.swapaxes(0, 1))
     screen.blit(img, (0, 0))
     pygame.display.flip()
+    print("playing video")
 
 try:
     while True:
-        time.sleep(0.05)
+        print("0.2 pause")
+        time.sleep(0.2)
         image_path = frame_to_display
+        print("found image")
         image_loaded = False
+        
 
         if image_path and os.path.exists(image_path):  # Check if image_path is not None and the file exists
             try:
                 image = pygame.image.load(image_path)
+                print("image loaded")
                 image = pygame.transform.scale(image, (new_width, height))
                 screen.blit(image, (0, 0))
                 pygame.display.flip()
                 image_loaded = True
+                print("image displayed")
+                
             except Exception as e:
                 print(f"Failed to load image: {e}")
 
@@ -86,22 +93,28 @@ try:
             ret, frame = cap.read()
             if ret:  # Check if the frame was successfully captured
                 play_vid(frame)
-                
+                print("video is playing")
+
         # Handle events
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_q):
+                print("q to quit")
                 raise StopIteration  # Break out of the loop
 
             # Check for 'y' key press to save the frame
             if event.type == KEYDOWN and event.key == K_y:
+                print("key event detected")
                 if not y_key_pressed:  # Check if the 'Y' key was not already pressed
                     ret, frame = cap.read()
                     play_vid(frame)
+                    print("played vid")
                     save_frame(frame)  # Save the frame with an auto-incremented number
+                    print("took pic")
                     y_key_pressed = True  # Set the variable to True after the action
 
             if event.type == KEYUP and event.key == K_y:
                 y_key_pressed = False  # Reset the variable when the 'Y' key is released
+                print("released key")
 
 
 
