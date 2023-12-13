@@ -49,7 +49,7 @@ frame_to_display = None
 
 # Function to save the frame
 def save_frame(image, directory= frames_d , prefix='frame', file_format='jpg'):
-    global frame_number  # Declare frame_number as global to modify it
+    global frame_number, frame_to_display  # Declare both as global
     filename = f"{prefix}_{frame_number}.{file_format}"
     filepath = os.path.join(directory, filename)
     cv2.imwrite(filepath, image)
@@ -67,12 +67,11 @@ def play_vid(frame):
 
 try:
     while True:
-
         time.sleep(0.05)
-        # Attempt to load the image
         image_path = frame_to_display
         image_loaded = False
-        if os.path.exists(image_path):
+
+        if image_path and os.path.exists(image_path):  # Check if image_path is not None and the file exists
             try:
                 image = pygame.image.load(image_path)
                 image = pygame.transform.scale(image, (new_width, height))
@@ -85,8 +84,9 @@ try:
         # If the image is not loaded, capture a new frame
         if not image_loaded:
             ret, frame = cap.read()
-            play_vid(frame)
-
+            if ret:  # Check if the frame was successfully captured
+                play_vid(frame)
+                
         # Handle events
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_q):
