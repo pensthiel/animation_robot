@@ -43,6 +43,8 @@ print(f"Random integer between 1 and 1000: {rand_int}")
 os.makedirs(f"frames{rand_int}")
 frames_d = (f"frames{rand_int}")
 
+y_key_pressed = False
+
 # Function to save the frame
 def save_frame(image, directory= frames_d , prefix='frame', file_format='jpg'):
     global frame_number  # Declare frame_number as global to modify it
