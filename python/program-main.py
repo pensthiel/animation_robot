@@ -5,7 +5,7 @@ from gpiozero import Button
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import os
 import random
-from picamera import PiCamera
+
 
 
 
