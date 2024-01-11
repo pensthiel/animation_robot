@@ -5,7 +5,8 @@ from gpiozero import Button
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import os
 import random
-
+from picamera import PiCamera
+from picamera.array import PiRGBArray
 
 
 
@@ -27,10 +28,6 @@ GPIO.setup(16, GPIO.OUT) # IR
 
 # Initialize Pygame
 pygame.init()
-
-# LED ON yELLOW
-GPIO.output(27,GPIO.HIGH) 
-
 
 
 
@@ -58,14 +55,13 @@ width = screen_info.current_w
 height = screen_info.current_h
 
 # Initialize the camera
-cap = PiCamera()
-
-# Fetch the frame width and height
-frame_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-frame_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+camera = PiCamera()
+camera.resolution = (640, 480)  # Set resolution to 640x480 for example
+camera.framerate = 24
+rawCapture = PiRGBArray(camera, size=camera.resolution)
 
 # Calculate the ratio
-ratio = frame_width / frame_height
+ratio = camera.resolution[0] / camera.resolution[1]
 new_width = int(height * ratio)
 
 # Frame count initialization
@@ -96,16 +92,28 @@ def save_frame(image, directory=frames_d, prefix='frame', file_format='jpg'):
     print(f"{filepath} Saved")
     frame_to_display = filepath
     frame_number += 1  # Increment the frame number
-    
 
-#first image
-ret, frame = cap.read()
-frame = cv2.resize(frame, (new_width, height))
-img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-img = pygame.surfarray.make_surface(img.swapaxes(0, 1))
-screen.blit(img, (0, 0))
+
+def LEDS_on():
+    GPIO.output(18,GPIO.HIGH) 
+    GPIO.output(24,GPIO.HIGH) 
+    GPIO.output(27,GPIO.HIGH) 
+    GPIO.output(23,GPIO.HIGH)
+
+def LEDS_off():
+    GPIO.output(18,GPIO.LOW) 
+    GPIO.output(24,GPIO.LOW) 
+    GPIO.output(27,GPIO.LOW) 
+    GPIO.output(23,GPIO.LOW)
+
+LEDS_on()
+
+camera.capture(rawCapture, format="rgb")
+frame = rawCapture.array
+frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
+screen.blit(frame, (0, 0))
 pygame.display.flip()
-print("first image")
+rawCapture.truncate(0)  
 
 try:
 
@@ -252,5 +260,5 @@ except StopIteration:
 finally:
     # Release resources
     pygame.quit()
-    cap.release()
     GPIO.cleanup()
+    camera.close()
