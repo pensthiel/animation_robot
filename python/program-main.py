@@ -76,6 +76,7 @@ y_key_pressed = False
 frame_to_display = None
 next_button_pressed = False
 preview_button_pressed = False
+filepath2 = None
 
 
 # Function to save the frame
@@ -156,12 +157,12 @@ try:
             
 
 
-                # PREVIEW 
-                if preview_button_pressed:
+            # PREVIEW 
+            if preview_button_pressed:
 
-                filepath = os.path.join(frames_d, f"frame{preview_number}.jpg")
-                image = pygame.image.load(filepath)
-                print(filepath + " loaded")
+                filepath2 = os.path.join(frames_d, f"frame{preview_number}.jpg")
+                image = pygame.image.load(filepath2)
+                print(filepath2 + " loaded")
                 image = pygame.transform.scale(image, (new_width, height))
                 screen.blit(image, (0, 0))
                 pygame.display.flip()
