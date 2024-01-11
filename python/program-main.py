@@ -11,12 +11,12 @@ import random
 GPIO.setmode(GPIO.BCM)     # set up BCM GPIO numbering  
 
 GPIO.setup(17, GPIO.IN)   # NEXT FRAME
-pull_up_down=GPIO.PUD_DOWN)
+pull_up_down=GPIO.PUD_DOWN
 GPIO.setup(22, GPIO.IN)   # PREVIEW
-pull_up_down=GPIO.PUD_DOWN)
+pull_up_down=GPIO.PUD_DOWN
 
- GPIO.setup(21, GPIO.IN)   # shutdown?
-pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(21, GPIO.IN)   # shutdown?
+pull_up_down=GPIO.PUD_DOWN
 
 GPIO.setup(18, GPIO.OUT)   # output (LED)  WHITE
 GPIO.setup(24, GPIO.OUT)    # RED
