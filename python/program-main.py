@@ -10,13 +10,11 @@ import random
 
 GPIO.setmode(GPIO.BCM)     # set up BCM GPIO numbering  
 
-GPIO.setup(17, GPIO.IN)   # NEXT FRAME
-pull_up_down=GPIO.PUD_DOWN
-GPIO.setup(22, GPIO.IN)   # PREVIEW
-pull_up_down=GPIO.PUD_DOWN
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # NEXT FRAME
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # PREVIEW
 
-GPIO.setup(21, GPIO.IN)   # shutdown?
-pull_up_down=GPIO.PUD_DOWN
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # shutdown?
+
 
 GPIO.setup(18, GPIO.OUT)   # output (LED)  WHITE
 GPIO.setup(24, GPIO.OUT)    # RED
@@ -26,8 +24,15 @@ GPIO.setup(23, GPIO.OUT)    # GREEN
 GPIO.setup(16, GPIO.OUT) # IR 
 
 
+# LED ON yELLOW
+GPIO.output(27,GPIO.HIGH) 
+
+
+
+
 #how much time we give the pi to save the image
 SaveDelay = 2000 # 2 seconds in milliseconds
+VidFrameRate = 100
 
 # Use Pygame's clock to handle the timing
 clock = pygame.time.Clock()
@@ -113,12 +118,12 @@ try:
 
 
             # NEXT BUTTON
-            if GPIO.input(17): # if port 17 == 1  
-                print("next frame button is 1/HIGH/True")
+            if not GPIO.input(17): # if port 17 == 0  
+                print("next frame button is LOW (pressed)")
                 next_button_pressed = True
             # PREVIEW 
-            if GPIO.input(22): 
-                print("preview button is 1/HIGH/True")
+            if not GPIO.input(22): 
+                print("preview button is LOW (pressed)")
                 preview_button_pressed = True
 
             if next_button_pressed:
@@ -168,8 +173,13 @@ try:
                 pygame.display.flip()
                 image_loaded = True
                 print(frame_to_display + " displayed")
-
                 preview_number += 1
+                VidFrameRate_ticks = VidFrameRate 
+                start_VidFrameRate_ticks = pygame.time.get_ticks()
+                while pygame.time.get_ticks() - start_VidFrameRate_ticks < VidFrameRate_ticks:
+                    pygame.event.pump()
+                    clock.tick(60)
+
 
                 if preview_number > frame_number:
                     preview_number = 0
