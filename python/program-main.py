@@ -58,7 +58,7 @@ width = screen_info.current_w
 height = screen_info.current_h
 
 # Initialize the camera
-cap = PiCamera()
+cap = cv2.VideoCapture(0)
 
 # Fetch the frame width and height
 frame_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
