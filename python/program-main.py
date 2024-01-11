@@ -5,6 +5,7 @@ from gpiozero import Button
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import os
 import random
+from picamera import PiCamera
 
 
 
@@ -27,10 +28,6 @@ GPIO.setup(16, GPIO.OUT) # IR
 
 # Initialize Pygame
 pygame.init()
-
-# LED ON yELLOW
-GPIO.output(27,GPIO.HIGH) 
-
 
 
 
@@ -96,7 +93,21 @@ def save_frame(image, directory=frames_d, prefix='frame', file_format='jpg'):
     print(f"{filepath} Saved")
     frame_to_display = filepath
     frame_number += 1  # Increment the frame number
-    
+
+
+def LEDS_on():
+    GPIO.output(18,GPIO.HIGH) 
+    GPIO.output(24,GPIO.HIGH) 
+    GPIO.output(27,GPIO.HIGH) 
+    GPIO.output(23,GPIO.HIGH)
+
+def LEDS_off():
+    GPIO.output(18,GPIO.LOW) 
+    GPIO.output(24,GPIO.LOW) 
+    GPIO.output(27,GPIO.LOW) 
+    GPIO.output(23,GPIO.LOW)
+
+LEDS_on()
 
 #first image
 ret, frame = cap.read()
@@ -252,5 +263,4 @@ except StopIteration:
 finally:
     # Release resources
     pygame.quit()
-    cap.release()
     GPIO.cleanup()

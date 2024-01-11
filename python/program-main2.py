@@ -120,7 +120,7 @@ try:
     while True:
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
         image_loaded = False
-        ret, frame = cap.read()
+        camera.capture(rawCapture, format="rgb")
 
 
         # TEST
@@ -249,6 +249,8 @@ try:
 
             if event.type == pygame.KEYUP and event.key == pygame.K_y:
                 y_key_pressed = False  # Reset the variable when the 'Y' key is released
+            
+        rawCapture.truncate(0)  
 
 
 
