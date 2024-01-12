@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import os
 import random
 import libcamera
-import picamera2
+from picamera2 import Picamera2, Preview
 
 from signal import pause
 
@@ -60,7 +60,7 @@ width = screen_info.current_w
 height = screen_info.current_h
 
 # Initialize the camera
-picam2 = picamera2()
+picam2 = Picamera2()
 camera_config = picam2.create_still_configuration(main={"size": (1920, 1080)}, lores={"size": (640, 480)}, display="lores")
 picam2.configure(camera_config)
 print( "picam2 Initialized")
