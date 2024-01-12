@@ -5,8 +5,11 @@ from gpiozero import Button
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import os
 import random
-from picamera import PiCamera
-from picamera.array import PiRGBArray
+from picamera2 import Picamera2, Preview
+from signal import pause
+
+
+
 
 
 
@@ -15,7 +18,7 @@ GPIO.setmode(GPIO.BCM)     # set up BCM GPIO numbering
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # NEXT FRAME
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # PREVIEW
 
-GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # shutdown?
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)   # test button
 
 
 GPIO.setup(18, GPIO.OUT)   # output (LED)  WHITE
@@ -55,13 +58,14 @@ width = screen_info.current_w
 height = screen_info.current_h
 
 # Initialize the camera
-camera = PiCamera()
-camera.resolution = (640, 480)  # Set resolution to 640x480 for example
-camera.framerate = 24
-rawCapture = PiRGBArray(camera, size=camera.resolution)
+picam2 = Picamera2()
+camera_config = picam2.create_still_configuration(main={"size": (1920, 1080)}, lores={"size": (640, 480)}, display="lores")
+picam2.configure(camera_config)
+print( "picam2 Initialized")
+
 
 # Calculate the ratio
-ratio = camera.resolution[0] / camera.resolution[1]
+ratio = 1920 / 1080
 new_width = int(height * ratio)
 
 # Frame count initialization
@@ -84,14 +88,18 @@ filepath2 = None
 
 
 # Function to save the frame
-def save_frame(image, directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
+    
     global frame_number, frame_to_display  # Declare both as global
     filename = f"{prefix}_{frame_number}.{file_format}"
     filepath = os.path.join(directory, filename)
-    cv2.imwrite(filepath, image)
+    picam2.capture_file(filepath)
     print(f"{filepath} Saved")
     frame_to_display = filepath
+    picam2.stop_preview()
+    picam2.stop()
     frame_number += 1  # Increment the frame number
+
 
 
 def LEDS_on():
@@ -108,24 +116,23 @@ def LEDS_off():
 
 LEDS_on()
 
-camera.capture(rawCapture, format="rgb")
-frame = rawCapture.array
-frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
-screen.blit(frame, (0, 0))
-pygame.display.flip()
-rawCapture.truncate(0)  
+
+
+picam2.start_preview(Preview.QTGL)
+picam2.start()
+print( "picam2 started")
 
 try:
 
     while True:
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
         image_loaded = False
-        camera.capture(rawCapture, format="rgb")
+
 
 
         # TEST
         if not GPIO.input(21): 
-            print("black button is LOW (pressed), playing the next frame event as test")
+            print("test button is LOW (pressed), playing the next frame event as test")
             next_button_pressed = True
 
         # NEXT BUTTON
@@ -140,8 +147,9 @@ try:
         if next_button_pressed:
 
                 screen.fill((255, 255, 255))
+                picam2.start()
                 pygame.display.flip()  # Ensure the screen updates before capturing the frame
-                save_frame(frame)  # Save the frame with an auto-incremented number
+                save_frame()  # Save the frame with an auto-incremented number
 
                 # Delay before loading and displaying the image
                 save_delay_ticks = SaveDelay  
@@ -216,7 +224,7 @@ try:
                 if not y_key_pressed:  # Check if the 'Y' key was not already pressed
                     screen.fill((255, 255, 255))
                     pygame.display.flip()  # Ensure the screen updates before capturing the frame
-                    save_frame(frame)  # Save the frame with an auto-incremented number
+                    save_frame()  # Save the frame with an auto-incremented number
 
                     # Delay before loading and displaying the image
                     save_delay_ticks = SaveDelay  
@@ -249,8 +257,7 @@ try:
 
             if event.type == pygame.KEYUP and event.key == pygame.K_y:
                 y_key_pressed = False  # Reset the variable when the 'Y' key is released
-            
-        rawCapture.truncate(0)  
+
 
 
 
@@ -263,4 +270,6 @@ finally:
     # Release resources
     pygame.quit()
     GPIO.cleanup()
-    camera.close()
+    picam2.stop()
+    pause()
+
