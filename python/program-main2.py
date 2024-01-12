@@ -5,7 +5,8 @@ from gpiozero import Button
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import os
 import random
-from picamera2 import Picamera2, Preview
+from picamera import PiCamera, Color, Preview
+
 from signal import pause
 
 
