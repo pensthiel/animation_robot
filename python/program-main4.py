@@ -109,7 +109,7 @@ try:
         # TEST
         if not GPIO.input(21):
             print("test button is LOW (pressed), playing the next frame event as a test")
-            next_button_pressed = True
+            test_button_pressed = True
 
         # NEXT BUTTON
         if not GPIO.input(17):  # if port 17 == 0
@@ -120,6 +120,12 @@ try:
         if not GPIO.input(22):
             print("preview button is LOW (pressed)")
             preview_button_pressed = True
+
+        if test_button_pressed:
+            cv2.imshow("Camera", frame)
+            print("cv2.imshow(Camera, frame)")
+
+
 
         if next_button_pressed:
             print("next frame starts")
@@ -234,3 +240,4 @@ finally:
     GPIO.cleanup()
     picam2.stop()
     pause()
+
