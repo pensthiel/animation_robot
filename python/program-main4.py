@@ -67,6 +67,7 @@ y_key_pressed = False
 frame_to_display = None
 next_button_pressed = False
 preview_button_pressed = False
+test_button_pressed = False
 filepath2 = None
 new_width = 640  # Replace with the actual value
 
