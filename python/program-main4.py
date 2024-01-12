@@ -187,7 +187,7 @@ try:
                         VidFrameRate_ticks = VidFrameRate
                         start_VidFrameRate_ticks = pygame.time.get_ticks()
                         while pygame.time.get_ticks() - start_VidFrameRate_ticks < VidFrameRate_ticks:
-                        clock.tick(60)
+                            clock.tick(60)
                 
                 except Exception as file_error:
                     print("Error occurred while loading the image.")   # Use error handling to catch and report any issues smoothly.
