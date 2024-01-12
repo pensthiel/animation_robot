@@ -65,3 +65,7 @@ try:
             print("preview button is LOW (pressed)")
             LEDS_off()
             time.sleep(1)
+
+finally:
+    # Release resources
+    pause()
