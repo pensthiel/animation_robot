@@ -59,16 +59,15 @@ screen_info = pygame.display.Info()
 width = screen_info.current_w
 height = screen_info.current_h
 
+
 # Initialize the camera
 picam2 = Picamera2()
-camera_config = picam2.create_still_configuration(main={"size": (1920, 1080)}, lores={"size": (640, 480)}, display="lores")
-picam2.configure(camera_config)
+picam2.preview_configuration.main.size = (width, height)
+picam2.preview_configuration.main.format = "RGB888"
+picam2.preview_configuration.align()
+picam2.configure("preview")
+picam2.start()
 print( "picam2 Initialized")
-
-
-# Calculate the ratio
-ratio = 1920 / 1080
-new_width = int(height * ratio)
 
 # Frame count initialization
 frame_number = 0
@@ -90,12 +89,13 @@ filepath2 = None
 
 
 # Function to save the frame
-def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(frame, directory=frames_d, prefix='frame', file_format='jpg'):
     
     global frame_number, frame_to_display  # Declare both as global
     filename = f"{prefix}_{frame_number}.{file_format}"
     filepath = os.path.join(directory, filename)
-    picam2.capture_file(filepath)
+    picam2.capture_file(frame,filepath)
+    picam2.switch_mode_and_capture_file("still", filepath)
     print(f"{filepath} Saved")
     frame_to_display = filepath
     picam2.stop_preview()
@@ -119,17 +119,12 @@ def LEDS_off():
 LEDS_on()
 
 
-
-picam2.start_preview(Preview.QTGL)
-picam2.start()
-print( "picam2 started")
-
 try:
 
     while True:
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
         image_loaded = False
-
+        frame= picam2.capture_array()
 
 
         # TEST
@@ -149,9 +144,9 @@ try:
         if next_button_pressed:
 
                 screen.fill((255, 255, 255))
-                picam2.start()
+                cv2.imshow("Camera", frame)
                 pygame.display.flip()  # Ensure the screen updates before capturing the frame
-                save_frame()  # Save the frame with an auto-incremented number
+                save_frame(frame)  # Save the frame with an auto-incremented number
 
                 # Delay before loading and displaying the image
                 save_delay_ticks = SaveDelay  

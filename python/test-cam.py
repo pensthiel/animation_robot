@@ -7,6 +7,7 @@ picam2.preview_configuration.main.format = "RGB888"
 picam2.preview_configuration.align()
 picam2.configure("preview")
 picam2.start()
+picam2.sensor_resolution
 while True:
     im= picam2.capture_array()
     cv2.imshow("Camera", im)
