@@ -1,7 +1,6 @@
 import cv2
 import pygame
 from pygame.locals import *
-from gpiozero import Button
 import RPi.GPIO as GPIO
 import os
 import random
@@ -72,20 +71,27 @@ filepath2 = None
 new_width = 640  # Replace with the actual value
 
 # Function to save the frame
-def save_frame(frame, directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     global frame_number, frame_to_display  # Declare both as global
     filename = f"{prefix}_{frame_number}.{file_format}"
     filepath = os.path.join(directory, filename)
+    
     try:
-        picam2.capture_file(frame, filepath)
-        picam2.switch_mode_and_capture_file("still", filepath)
-        print(f"{filepath} Saved")
+        with picam2.capture_file("still", filepath) as f:  # Use 'with open()' to ensure proper file handling
+            print(f"{filepath} Saved")
+            
         frame_to_display = filepath
-        picam2.stop_preview()
-        picam2.stop()
+        
         frame_number += 1  # Increment the frame number
     except Exception as save_error:
         print(f"Error saving frame: {save_error}")
+
+
+def delay():
+    save_delay_ticks = SaveDelay
+    start_save_delay_ticks = pygame.time.get_ticks()
+    while pygame.time.get_ticks() - start_save_delay_ticks < save_delay_ticks:
+        clock.tick(60)
 
 def LEDS_on():
     GPIO.output(18, GPIO.HIGH)
@@ -133,60 +139,59 @@ try:
             screen.fill((255, 255, 255))
             try:
                 cv2.imshow("Camera", frame)
-                pygame.display.flip()  # Ensure the screen updates before capturing the frame
                 save_frame(frame)  # Save the frame with an auto-incremented number
-            except cv2.error as e:
-                print(f"Error displaying frame: {e}")
+
+            except Exception as display_error:
+                print(f"Error while trying to show the camera feed or update display: {display_error}")
                 next_button_pressed = False
 
             # Delay before loading and displaying the image
-            save_delay_ticks = SaveDelay
-            start_save_delay_ticks = pygame.time.get_ticks()
-            while pygame.time.get_ticks() - start_save_delay_ticks < save_delay_ticks:
-                pygame.event.pump()
-                clock.tick(60)
+            delay()
 
             # DISPLAY IMAGE
             try:
                 image = pygame.image.load(frame_to_display)
-                print(frame_to_display + " loaded")
-                image = pygame.transform.scale(image, (new_width, height))
-                screen.blit(image, (0, 0))
-                pygame.display.flip()
-                image_loaded = True
-                print(frame_to_display + " displayed")
-            except Exception as load_error:
-                print(f"Failed to load image: {load_error}")
+                
+                if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed things up significantly
+                    try:
+                        screen.blit(image, (0, 0))
+                        
+                        pygame.display.flip()
+                        image_loaded = True
+                    except Exception as load_error:
+                        print(f"Failed to load image: {load_error}")
+                    
+            except Exception as file_error:
+                print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
+
 
             # Delay before you can press the button again
-            save_delay_ticks = SaveDelay
-            start_save_delay_ticks = pygame.time.get_ticks()
-            while pygame.time.get_ticks() - start_save_delay_ticks < save_delay_ticks:
-                pygame.event.pump()
-                clock.tick(60)
+            delay()
             next_button_pressed = False  # Set the variable to True after the action
 
         # PREVIEW
         if preview_button_pressed:
             print("preview starts")
             filepath2 = os.path.join(frames_d, f"frame{preview_number}.jpg")
-            if os.path.exists(filepath2):
+            if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
                 try:
                     image = pygame.image.load(filepath2)
                     print(filepath2 + " loaded")
-                    image = pygame.transform.scale(image, (new_width, height))
-                    screen.blit(image, (0, 0))
-                    pygame.display.flip()
-                    image_loaded = True
-                    print(filepath2 + " displayed")
-                    preview_number += 1
-                    VidFrameRate_ticks = VidFrameRate
-                    start_VidFrameRate_ticks = pygame.time.get_ticks()
-                    while pygame.time.get_ticks() - start_VidFrameRate_ticks < VidFrameRate_ticks:
-                        pygame.event.pump()
+                    if not image is None and not image.get_rect().size == (0, 0):
+                        screen.blit(image, (0, 0))
+                        print(filepath2 + " displayed")
+                        pygame.display.flip()
+                        image_loaded = True
+                        preview_number += 1
+
+                        VidFrameRate_ticks = VidFrameRate
+                        start_VidFrameRate_ticks = pygame.time.get_ticks()
+                        while pygame.time.get_ticks() - start_VidFrameRate_ticks < VidFrameRate_ticks:
                         clock.tick(60)
-                except Exception as load_error:
-                    print(f"Failed to load image: {load_error}")
+                
+                except Exception as file_error:
+                    print("Error occurred while loading the image.")   # Use error handling to catch and report any issues smoothly.
+          
             else:
                 print("can't preview: Directory empty")
                 preview_button_pressed = False
@@ -199,7 +204,7 @@ try:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                 print("q to quit")
-                raise StopIteration  # Break out of the loop
+                break  # Exit the loop on quit event
 
             # Check for 'y' key press to save the frame
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
@@ -210,11 +215,8 @@ try:
                     save_frame()  # Save the frame with an auto-incremented number
 
                     # Delay before loading and displaying the image
-                    save_delay_ticks = SaveDelay
-                    start_save_delay_ticks = pygame.time.get_ticks()
-                    while pygame.time.get_ticks() - start_save_delay_ticks < save_delay_ticks:
-                        pygame.event.pump()
-                        clock.tick(60)
+                    delay()
+                    
 
                     try:
                         image = pygame.image.load(frame_to_display)
@@ -232,13 +234,11 @@ try:
             if event.type == pygame.KEYUP and event.key == pygame.K_y:
                 y_key_pressed = False  # Reset the variable when the 'Y' key is released
 
-except StopIteration:
-    pass  # Exit the loop when 'q' is pressed or the window is closed
+
 
 finally:
     # Release resources
-    pygame.quit()
     GPIO.cleanup()
     picam2.stop()
-    pause()
 
+pygame.quit()

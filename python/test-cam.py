@@ -68,4 +68,5 @@ try:
 
 finally:
     # Release resources
-    pause()
+    time.quit()
+    picam2.stop_preview()
