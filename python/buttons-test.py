@@ -34,25 +34,28 @@ def LEDS_off():
     GPIO.output(27, GPIO.LOW)
     GPIO.output(23, GPIO.LOW)
 
+def debounce(button_pin):
+    time.sleep(0.05)  # Adjust the sleep time based on your requirements
+    return GPIO.input(button_pin)
 
 try:
     while True:
-                # TEST
-        if not GPIO.input(21):
+        # TEST BUTTON
+        if not debounce(21):
             print("test button is LOW (pressed), playing the next frame event as a test")
             LEDS_on()
             time.sleep(1)
             LEDS_off()
 
         # NEXT BUTTON
-        if not GPIO.input(17):  # if port 17 == 0
+        if not debounce(17):
             print("next frame button is LOW (pressed)")
             LEDS_on()
             time.sleep(1)
             LEDS_off()
 
-        # PREVIEW
-        if not GPIO.input(22):
+        # PREVIEW BUTTON
+        if not debounce(22):
             print("preview button is LOW (pressed)")
             LEDS_on()
             time.sleep(1)
@@ -63,9 +66,8 @@ try:
                 print("q to quit")
                 break
 
-
 finally:
-    # Release resourcesc
+    # Release resources
     GPIO.cleanup()
     pygame.quit()
     quit()
