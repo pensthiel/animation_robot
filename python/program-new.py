@@ -105,12 +105,12 @@ def LEDS_off():
     GPIO.output(27, GPIO.LOW)
     GPIO.output(23, GPIO.LOW)
 
-
+screen.fill((200, 150, 250))
 LEDS_on()
 try:
     while True:
         pygame.display.flip()
-        screen.fill((200, 100, 200))
+
 
        
         if not debounce(17):
@@ -134,8 +134,11 @@ try:
 
         if next_button_pressed:
             print("next frame starts")
-            screen.fill((255, 255, 255))
-            save_frame()
+            try:
+                screen.fill((255, 255, 255))
+                save_frame()
+            except Exception as next_frame_error:
+                print(f"couldn't complete save_frame {next_frame_error}")
 
             try:
                 image = pygame.image.load(frame_to_display)
