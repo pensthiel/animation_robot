@@ -51,6 +51,7 @@ next_button_pressed = False
 preview_button_pressed = False
 filepath = None
 filepath2 = None
+size = None
 # Frame count initialization
 frame_number = 0
 preview_number = 0
@@ -70,7 +71,7 @@ size = picam2.capture_metadata()['ScalerCrop'][2:]
 # Get the full resolution of the camera
 full_res = picam2.camera_properties['PixelArraySize']
 
-def save_frame(size, directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     try:
         # Capture metadata to sync with the arrival of a new camera frame
         picam2.capture_metadata()
@@ -140,7 +141,7 @@ try:
             print("next frame starts")
             try:
                 screen.fill((255, 255, 255))
-                save_frame(size)
+                save_frame()
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
 
