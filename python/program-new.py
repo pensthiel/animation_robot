@@ -33,12 +33,6 @@ print("picam init")
 
 zoom = 0.95 # copped image /1
 
-size = picam2.capture_metadata()['ScalerCrop'][2:]
-full_res = picam2.camera_properties['PixelArraySize']
-picam2.capture_metadata()
-size = [int(s * zoom) for s in size]
-offset = [(r - s) // 2 for r, s in zip(full_res, size)]
-picam2.set_controls({"ScalerCrop": offset + size})
 
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -68,9 +62,16 @@ preview_config = picam2.create_preview_configuration()
 picam2.configure(preview_config)
 picam2.start()
 print("picam2 started")
-
 # Wait for 2 seconds to allow the camera to initialize
 time.sleep(2)
+
+picam2.capture_metadata()
+size = picam2.capture_metadata()['ScalerCrop'][2:]
+full_res = picam2.camera_properties['PixelArraySize']
+picam2.capture_metadata()
+size = [int(s * zoom) for s in size]
+offset = [(r - s) // 2 for r, s in zip(full_res, size)]
+picam2.set_controls({"ScalerCrop": offset + size})
 
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
