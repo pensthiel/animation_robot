@@ -145,10 +145,10 @@ try:
                 print(f"couldn't complete save_frame {next_frame_error}")
 
             try:
-                image = pygame.image.load(frame_to_display)
-                
-                if os.path.exists(filepath):  # Checking for file existence outside the loop can speed things up significantly
+
+                if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
                     try:
+                        image = pygame.image.load(frame_to_display)
                         screen.fill((255, 255, 255))
                         screen.blit(image, (0, 0)) 
                         pygame.display.flip()
