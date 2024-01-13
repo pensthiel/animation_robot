@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-import keyboard  # Import the keyboard module
+from pygame.locals import *
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
@@ -11,6 +11,10 @@ GPIO.setup(24, GPIO.OUT)  # RED
 GPIO.setup(27, GPIO.OUT)  # YELLOW
 GPIO.setup(23, GPIO.OUT)  # GREEN
 GPIO.setup(16, GPIO.OUT)  # IR
+
+# Initialize Pygame
+pygame.init()
+
 
 def stop_program():
     global stop_flag
@@ -28,9 +32,7 @@ def LEDS_off():
     GPIO.output(24, GPIO.LOW)
     GPIO.output(27, GPIO.LOW)
     GPIO.output(23, GPIO.LOW)
-    
-# Add an event listener for the 'Q' key to stop the program
-keyboard.on_press_key('Q', stop_program)
+
 
 try:
     while True:
@@ -55,9 +57,14 @@ try:
             time.sleep(1)
             LEDS_off()
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+                print("q to quit")
+                break
 
 
 finally:
     # Release resourcesc
     GPIO.cleanup()
-    keyboard.unhook_all()
+    pygame.quit()
+    quit()

@@ -5,8 +5,8 @@ from picamera2 import Picamera2, Preview
 import RPi.GPIO as GPIO
 import os
 import random
-import keyboard
 import time
+from pygame.locals import *
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
@@ -17,6 +17,10 @@ GPIO.setup(24, GPIO.OUT)  # RED
 GPIO.setup(27, GPIO.OUT)  # YELLOW
 GPIO.setup(23, GPIO.OUT)  # GREEN
 GPIO.setup(16, GPIO.OUT)  # IR
+
+# Initialize Pygame
+pygame.init()
+
 
 # Create a Picamera2 instance
 picam2 = Picamera2()
@@ -94,16 +98,16 @@ LEDS_on()
 try:
     while True:
     
-        if keyboard.is_pressed('q'):  
-            print('Q to exit')
-            break
+
                   # TEST
-        if not GPIO.input(21) or not GPIO.input(17) or keyboard.is_pressed('y'):
+        if not GPIO.input(21) or not GPIO.input(17):
             print("next button is LOW (pressed), playing the next frame event as a test")
             LEDS_off()
             time.sleep(1)
             LEDS_on()
             test_button_pressed = True
+        
+        
 
         if next_button_pressed:
             print("next frame starts")
@@ -119,6 +123,24 @@ try:
 
             next_button_pressed = False
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+                print("q to quit")
+                break
+            
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
+                print("y key event detected")
+                if not y_key_pressed:
+                    print("next frame triggered with y key")
+                    test_button_pressed = True
+                    y_key_pressed = True  # Set the variable to True after the action
+                    
+                if event.type == pygame.KEYUP and event.key == pygame.K_y:
+                    y_key_pressed = False  # Reset the variable when the 'Y' key is released
+
+
+
+
 
    
 
@@ -126,3 +148,6 @@ finally:
     # Release resources
     GPIO.cleanup()
     picam2.stop()
+    pygame.quit()
+    quit()
+
