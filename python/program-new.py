@@ -71,7 +71,7 @@ size = picam2.capture_metadata()['ScalerCrop'][2:]
 # Get the full resolution of the camera
 full_res = picam2.camera_properties['PixelArraySize']
 
-def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(size, directory=frames_d, prefix='frame', file_format='jpg'):
     try:
         # Capture metadata to sync with the arrival of a new camera frame
         picam2.capture_metadata()
@@ -85,8 +85,10 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         filepath = os.path.join(directory, filename)
         picam2.capture_file(filepath)
         frame_to_display = filepath
+        led_signal()
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
+
     
 
 def debounce(button_pin):
@@ -105,6 +107,11 @@ def LEDS_off():
     GPIO.output(27, GPIO.LOW)
     GPIO.output(23, GPIO.LOW)
 
+def led_signal():
+    LEDS_off()
+    time.sleep(1)
+    LEDS_on()
+
 screen.fill((200, 150, 250))
 LEDS_on()
 try:
@@ -115,9 +122,7 @@ try:
        
         if not debounce(17):
             print("next button is LOW (pressed), playing the next frame event")
-            LEDS_off()
-            time.sleep(1)
-            LEDS_on()
+            led_signal()
             next_button_pressed = True
         
         if not debounce(21):
@@ -126,9 +131,7 @@ try:
 
         if not debounce(22):
             print("preview button is LOW (pressed), playing the next frame event as a test")
-            LEDS_off()
-            time.sleep(1)
-            LEDS_on()
+            led_signal()
             preview_button_pressed = True
         
 
@@ -136,7 +139,7 @@ try:
             print("next frame starts")
             try:
                 screen.fill((255, 255, 255))
-                save_frame()
+                save_frame(size)
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
 
