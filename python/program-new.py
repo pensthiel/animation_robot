@@ -68,16 +68,11 @@ time.sleep(2)
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     try:
-        # Get the initial size for cropping
         size = picam2.capture_metadata()['ScalerCrop'][2:]
-        # Get the full resolution of the camera
         full_res = picam2.camera_properties['PixelArraySize']
-        # Capture metadata to sync with the arrival of a new camera frame
         picam2.capture_metadata()
         size = [int(s * zoom) for s in size]
-        # Calculate the offset to center the cropped area
         offset = [(r - s) // 2 for r, s in zip(full_res, size)]
-        # Set the "ScalerCrop" control with the new offset and size
         picam2.set_controls({"ScalerCrop": offset + size})
         global frame_number, frame_to_display  # Declare both as global
         filename = f"{prefix}_{frame_number}.{file_format}"
@@ -124,7 +119,6 @@ try:
        
         if not debounce(17):
             print("next button pressed")
-            led_signal()
             next_button_pressed = True
         
         if not debounce(21):
@@ -133,7 +127,6 @@ try:
 
         if not debounce(22):
             print("preview button pressed")
-            led_signal()
             preview_button_pressed = True
         
 
@@ -144,16 +137,15 @@ try:
                 save_frame()
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
-
             try:
-
                 if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
                     try:
                         image = pygame.image.load(frame_to_display)
+                        scaled_image = pygame.transform.scale(image, width, height)
                         screen.fill((255, 255, 255))
-                        screen.blit(image, (0, 0)) 
+                        screen.blit(scaled_image, (0, 0)) 
                         pygame.display.flip()
-
+                        led_signal()
                     except Exception as load_error:
                         print(f"Failed to load image: {load_error}")
                     
@@ -171,8 +163,9 @@ try:
                 try:
                     if not image is None and not image.get_rect().size == (0, 0):
                         image = pygame.image.load(filepath2)
+                        scaled_image = pygame.transform.scale(image, width, height)
                         print(filepath2 + " loaded")
-                        screen.blit(image, (0, 0))
+                        screen.blit(scaled_image, (0, 0))
                         print(filepath2 + " displayed")
                         time.sleep(0.1)
                 
@@ -189,6 +182,7 @@ try:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+                led_signal()
                 print("q to quit")
                 break
             
@@ -196,20 +190,12 @@ try:
                 print("y key event detected")
                 if not y_key_pressed:
                     print("next frame triggered with y key")
-                    test_button_pressed = True
+                    next_button_pressed = True
                     y_key_pressed = True  # Set the variable to True after the action
                     
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
 
-
-
-
-
-
-
-
-   
 
 finally:
     # Release resources
