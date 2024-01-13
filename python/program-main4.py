@@ -7,6 +7,7 @@ import random
 from picamera2 import Picamera2, Preview
 from signal import pause
 
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # PREVIEW
@@ -68,7 +69,7 @@ next_button_pressed = False
 preview_button_pressed = False
 test_button_pressed = False
 filepath2 = None
-new_width = 640  # Replace with the actual value
+
 
 # Function to save the frame
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
@@ -204,6 +205,8 @@ try:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                 print("q to quit")
+                pygame.quit()
+                cv2.destroyAllWindows()
                 break  # Exit the loop on quit event
 
             # Check for 'y' key press to save the frame
@@ -237,8 +240,9 @@ try:
 
 
 finally:
-    # Release resources
+    # Release resourcesc
     GPIO.cleanup()
     picam2.stop()
+    pygame.quit()
+    cv2.destroyAllWindows()
 
-pygame.quit()
