@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import pygame
 from pygame.locals import *
 
 GPIO.setmode(GPIO.BCM)

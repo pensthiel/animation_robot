@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import os
 import random
 import time
+import pygame
 from pygame.locals import *
 
 GPIO.setmode(GPIO.BCM)
