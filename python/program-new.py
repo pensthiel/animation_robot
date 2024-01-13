@@ -116,13 +116,13 @@ try:
     while True:
     
 
-                  # TEST
+       
         if not debounce(17):
-            print("next button is LOW (pressed), playing the next frame event as a test")
+            print("next button is LOW (pressed), playing the next frame event")
             LEDS_off()
             time.sleep(1)
             LEDS_on()
-            test_button_pressed = True
+            next_button_pressed = True
         
         if not debounce(21):
             break
