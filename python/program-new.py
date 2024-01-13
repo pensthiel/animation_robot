@@ -29,6 +29,7 @@ height = screen_info.current_h
 
 # Create a Picamera2 instance
 picam2 = Picamera2()
+print("picam init")
 
 zoom = 0.95 # copped image /1
 
@@ -56,19 +57,10 @@ frame_number = 0
 preview_number = 0
 
 
-
-
-
-# Create a preview configuration
 preview_config = picam2.create_preview_configuration()
-
-# Configure the camera with the preview configuration
 picam2.configure(preview_config)
-
-# Start the preview
-picam2.start_preview(Preview.DRM)
-
 picam2.start()
+print("picam2 started")
 
 # Wait for 2 seconds to allow the camera to initialize
 time.sleep(2)
@@ -80,19 +72,22 @@ size = picam2.capture_metadata()['ScalerCrop'][2:]
 full_res = picam2.camera_properties['PixelArraySize']
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
-    screen.fill((255, 255, 255))
-    # Capture metadata to sync with the arrival of a new camera frame
-    picam2.capture_metadata()
-    size = [int(s * zoom) for s in size]
-    # Calculate the offset to center the cropped area
-    offset = [(r - s) // 2 for r, s in zip(full_res, size)]
-    # Set the "ScalerCrop" control with the new offset and size
-    picam2.set_controls({"ScalerCrop": offset + size})
-    global frame_number, frame_to_display  # Declare both as global
-    filename = f"{prefix}_{frame_number}.{file_format}"
-    filepath = os.path.join(directory, filename)
-    picam2.capture_file(filepath)
-    frame_to_display = filepath
+    try:
+        # Capture metadata to sync with the arrival of a new camera frame
+        picam2.capture_metadata()
+        size = [int(s * zoom) for s in size]
+        # Calculate the offset to center the cropped area
+        offset = [(r - s) // 2 for r, s in zip(full_res, size)]
+        # Set the "ScalerCrop" control with the new offset and size
+        picam2.set_controls({"ScalerCrop": offset + size})
+        global frame_number, frame_to_display  # Declare both as global
+        filename = f"{prefix}_{frame_number}.{file_format}"
+        filepath = os.path.join(directory, filename)
+        picam2.capture_file(filepath)
+        frame_to_display = filepath
+    except Exception as error:
+        print(f"Failed to take and save frame: {error}")
+    
 
 def debounce(button_pin):
     time.sleep(0.05)  # Adjust the sleep time based on your requirements
@@ -114,7 +109,7 @@ def LEDS_off():
 LEDS_on()
 try:
     while True:
-    
+        
 
        
         if not debounce(17):
@@ -125,6 +120,7 @@ try:
             next_button_pressed = True
         
         if not debounce(21):
+            print("exit button pressed")
             break
 
         if not debounce(22):
@@ -138,15 +134,14 @@ try:
         if next_button_pressed:
             print("next frame starts")
             save_frame()
-            picam2.stop_preview()
 
             try:
                 image = pygame.image.load(frame_to_display)
                 
                 if os.path.exists(filepath):  # Checking for file existence outside the loop can speed things up significantly
                     try:
+                        screen.fill((255, 255, 255))
                         screen.blit(image, (0, 0)) 
-                        
                         pygame.display.flip()
                         image_loaded = True
                     except Exception as load_error:
