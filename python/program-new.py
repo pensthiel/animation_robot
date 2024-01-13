@@ -71,7 +71,7 @@ size = picam2.capture_metadata()['ScalerCrop'][2:]
 # Get the full resolution of the camera
 full_res = picam2.camera_properties['PixelArraySize']
 
-def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(size,directory=frames_d, prefix='frame', file_format='jpg'):
     try:
         # Capture metadata to sync with the arrival of a new camera frame
         picam2.capture_metadata()
@@ -109,7 +109,7 @@ def LEDS_off():
 LEDS_on()
 try:
     while True:
-        
+        screen.fill((200, 100, 200))
 
        
         if not debounce(17):
@@ -133,6 +133,7 @@ try:
 
         if next_button_pressed:
             print("next frame starts")
+            screen.fill((255, 255, 255))
             save_frame()
 
             try:
