@@ -162,7 +162,7 @@ try:
 
         if preview_button_pressed:
             print("preview starts")
-            filepath2 = os.path.join(frames_d, f"frame{preview_number}.jpg")
+            filepath2 = os.path.join(frames_d, f"frame_{preview_number}.jpg")
             print(filepath2)
             if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
                 try:
