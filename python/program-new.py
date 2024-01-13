@@ -56,8 +56,7 @@ frame_number = 0
 preview_number = 0
 
 
-# Start the camera
-picam2.start()
+
 
 
 # Create a preview configuration
@@ -68,6 +67,8 @@ picam2.configure(preview_config)
 
 # Start the preview
 picam2.start_preview(Preview.DRM)
+
+picam2.start()
 
 # Wait for 2 seconds to allow the camera to initialize
 time.sleep(2)
