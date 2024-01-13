@@ -33,6 +33,13 @@ print("picam init")
 
 zoom = 0.95 # copped image /1
 
+size = picam2.capture_metadata()['ScalerCrop'][2:]
+full_res = picam2.camera_properties['PixelArraySize']
+picam2.capture_metadata()
+size = [int(s * zoom) for s in size]
+offset = [(r - s) // 2 for r, s in zip(full_res, size)]
+picam2.set_controls({"ScalerCrop": offset + size})
+
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
@@ -68,19 +75,13 @@ time.sleep(2)
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     try:
-        screen.fill((255, 255, 255))
-        size = picam2.capture_metadata()['ScalerCrop'][2:]
-        full_res = picam2.camera_properties['PixelArraySize']
-        picam2.capture_metadata()
-        size = [int(s * zoom) for s in size]
-        offset = [(r - s) // 2 for r, s in zip(full_res, size)]
-        picam2.set_controls({"ScalerCrop": offset + size})
         global frame_number, frame_to_display  # Declare both as global
         filename = f"{prefix}_{frame_number}.{file_format}"
         print(filename)
         filepath = os.path.join(directory, filename)
         print(filepath)
         screen.fill((255, 255, 255))
+        picam2.capture_metadata()
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
@@ -108,7 +109,7 @@ def LEDS_off():
 
 def led_signal():
     LEDS_off()
-    time.sleep(1)
+    time.sleep(0.05)
     LEDS_on()
 
 screen.fill((200, 150, 250))
@@ -147,6 +148,7 @@ try:
                         screen.blit(scaled_image, (0, 0)) 
                         pygame.display.flip()
                         led_signal()
+                    
                     except Exception as load_error:
                         print(f"Failed to load image: {load_error}")
                     
