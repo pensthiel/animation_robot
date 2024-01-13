@@ -17,10 +17,6 @@ GPIO.setup(16, GPIO.OUT)  # IR
 pygame.init()
 
 
-def stop_program():
-    global stop_flag
-    stop_flag = True
-    pass
 
 def LEDS_on():
     GPIO.output(18, GPIO.HIGH)
