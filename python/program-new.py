@@ -68,6 +68,7 @@ time.sleep(2)
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     try:
+        screen.fill((255, 255, 255))
         size = picam2.capture_metadata()['ScalerCrop'][2:]
         full_res = picam2.camera_properties['PixelArraySize']
         picam2.capture_metadata()
@@ -79,6 +80,7 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         print(filename)
         filepath = os.path.join(directory, filename)
         print(filepath)
+        screen.fill((255, 255, 255))
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
@@ -142,7 +144,6 @@ try:
                     try:
                         image = pygame.image.load(frame_to_display)
                         scaled_image = pygame.transform.scale(image, (width, height))
-                        screen.fill((255, 255, 255))
                         screen.blit(scaled_image, (0, 0)) 
                         pygame.display.flip()
                         led_signal()
