@@ -141,7 +141,7 @@ try:
                 if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
                     try:
                         image = pygame.image.load(frame_to_display)
-                        scaled_image = pygame.transform.scale(image, width, height)
+                        scaled_image = pygame.transform.scale(image, (width, height))
                         screen.fill((255, 255, 255))
                         screen.blit(scaled_image, (0, 0)) 
                         pygame.display.flip()
@@ -163,7 +163,7 @@ try:
                 try:
                     if not image is None and not image.get_rect().size == (0, 0):
                         image = pygame.image.load(filepath2)
-                        scaled_image = pygame.transform.scale(image, width, height)
+                        scaled_image = pygame.transform.scale(image, (width, height))
                         print(filepath2 + " loaded")
                         screen.blit(scaled_image, (0, 0))
                         print(filepath2 + " displayed")
