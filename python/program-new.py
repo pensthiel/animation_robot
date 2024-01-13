@@ -49,7 +49,6 @@ y_key_pressed = False
 frame_to_display = None
 next_button_pressed = False
 preview_button_pressed = False
-test_button_pressed = False
 filepath = None
 filepath2 = None
 # Frame count initialization
@@ -82,7 +81,9 @@ def save_frame(size, directory=frames_d, prefix='frame', file_format='jpg'):
         picam2.set_controls({"ScalerCrop": offset + size})
         global frame_number, frame_to_display  # Declare both as global
         filename = f"{prefix}_{frame_number}.{file_format}"
+        print(filename)
         filepath = os.path.join(directory, filename)
+        print(filepath)
         picam2.capture_file(filepath)
         frame_to_display = filepath
         led_signal()
@@ -121,7 +122,7 @@ try:
 
        
         if not debounce(17):
-            print("next button is LOW (pressed), playing the next frame event")
+            print("next button pressed")
             led_signal()
             next_button_pressed = True
         
@@ -130,7 +131,7 @@ try:
             break
 
         if not debounce(22):
-            print("preview button is LOW (pressed), playing the next frame event as a test")
+            print("preview button pressed")
             led_signal()
             preview_button_pressed = True
         
@@ -151,7 +152,6 @@ try:
                         screen.fill((255, 255, 255))
                         screen.blit(image, (0, 0)) 
                         pygame.display.flip()
-                        image_loaded = True
                     except Exception as load_error:
                         print(f"Failed to load image: {load_error}")
                     
@@ -163,6 +163,7 @@ try:
         if preview_button_pressed:
             print("preview starts")
             filepath2 = os.path.join(frames_d, f"frame{preview_number}.jpg")
+            print(filepath2)
             if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
                 try:
                     image = pygame.image.load(filepath2)
@@ -170,7 +171,6 @@ try:
                     if not image is None and not image.get_rect().size == (0, 0):
                         screen.blit(image, (0, 0))
                         print(filepath2 + " displayed")
-                        image_loaded = True
                         preview_number += 1
                         time.sleep(0.1)
                 
