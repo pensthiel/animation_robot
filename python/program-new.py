@@ -109,6 +109,7 @@ def LEDS_off():
 LEDS_on()
 try:
     while True:
+        pygame.display.flip()
         screen.fill((200, 100, 200))
 
        
@@ -163,7 +164,6 @@ try:
                     if not image is None and not image.get_rect().size == (0, 0):
                         screen.blit(image, (0, 0))
                         print(filepath2 + " displayed")
-                        pygame.display.flip()
                         image_loaded = True
                         preview_number += 1
                         time.sleep(0.1)
@@ -193,6 +193,9 @@ try:
                     
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
+
+
+
 
 
 
