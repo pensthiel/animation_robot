@@ -86,6 +86,7 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         print(filepath)
         picam2.capture_file(filepath)
         frame_to_display = filepath
+        frame_number += 1
         led_signal()
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
@@ -152,6 +153,7 @@ try:
                         screen.fill((255, 255, 255))
                         screen.blit(image, (0, 0)) 
                         pygame.display.flip()
+
                     except Exception as load_error:
                         print(f"Failed to load image: {load_error}")
                     
@@ -163,15 +165,15 @@ try:
         if preview_button_pressed:
             print("preview starts")
             filepath2 = os.path.join(frames_d, f"frame_{preview_number}.jpg")
+            preview_number += 1
             print(filepath2)
             if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
                 try:
-                    image = pygame.image.load(filepath2)
-                    print(filepath2 + " loaded")
                     if not image is None and not image.get_rect().size == (0, 0):
+                        image = pygame.image.load(filepath2)
+                        print(filepath2 + " loaded")
                         screen.blit(image, (0, 0))
                         print(filepath2 + " displayed")
-                        preview_number += 1
                         time.sleep(0.1)
                 
                 except Exception as file_error:
