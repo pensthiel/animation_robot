@@ -51,7 +51,7 @@ next_button_pressed = False
 preview_button_pressed = False
 filepath = None
 filepath2 = None
-size = None
+
 # Frame count initialization
 frame_number = 0
 preview_number = 0
@@ -65,14 +65,13 @@ print("picam2 started")
 # Wait for 2 seconds to allow the camera to initialize
 time.sleep(2)
 
-# Get the initial size for cropping
-size = picam2.capture_metadata()['ScalerCrop'][2:]
-
-# Get the full resolution of the camera
-full_res = picam2.camera_properties['PixelArraySize']
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     try:
+        # Get the initial size for cropping
+        size = picam2.capture_metadata()['ScalerCrop'][2:]
+        # Get the full resolution of the camera
+        full_res = picam2.camera_properties['PixelArraySize']
         # Capture metadata to sync with the arrival of a new camera frame
         picam2.capture_metadata()
         size = [int(s * zoom) for s in size]
