@@ -32,9 +32,9 @@ height = screen_info.current_h
 picam2 = Picamera2()
 print("picam init")
 
-zoom = 0.95 # copped image /1
-offset_tweak_left = 0  # Change this value as needed
-offset_tweak_top = 0  # Change this value as needed
+zoom = 1.1 # copped image /1
+offset_tweak_left = -50  # Change this value as needed
+offset_tweak_top = -20  # Change this value as needed
 
 
 
