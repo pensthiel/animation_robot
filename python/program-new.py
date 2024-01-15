@@ -91,8 +91,8 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         filepath = os.path.join(directory, filename)
         print(filepath)
         screen.fill((255, 255, 255))
+        time.sleep(2)
         picam2.capture_metadata()
-        screen.fill((255, 255, 255))
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
@@ -150,7 +150,6 @@ try:
             print("next frame starts")
             try:
                 screen.fill((255, 255, 255))
-                led_signal()
                 save_frame()
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
@@ -196,6 +195,7 @@ try:
 
             if preview_number > frame_number:
                 preview_number = 0
+                
                 preview_button_pressed = False
 
             if preview_number > 20:
