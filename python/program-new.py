@@ -35,6 +35,8 @@ print("picam init")
 zoom = 0.95 # copped image /1
 
 
+
+
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
@@ -72,6 +74,12 @@ full_res = picam2.camera_properties['PixelArraySize']
 picam2.capture_metadata()
 size = [int(s * zoom) for s in size]
 offset = [(r - s) // 2 for r, s in zip(full_res, size)]
+# Set initial offset values
+print(f"offset : {offset}")
+#offset_tweak_width = 0  # Change this value as needed
+#offset_tweak_height = 0  # Change this value as needed
+#offset_tweak = (offset_tweak_width, offset_tweak_height)
+
 picam2.set_controls({"ScalerCrop": offset + size})
 
 
@@ -84,6 +92,7 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         print(filepath)
         screen.fill((255, 255, 255))
         picam2.capture_metadata()
+        screen.fill((255, 255, 255))
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
@@ -141,6 +150,7 @@ try:
             print("next frame starts")
             try:
                 screen.fill((255, 255, 255))
+                led_signal()
                 save_frame()
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
@@ -151,14 +161,15 @@ try:
                         scaled_image = pygame.transform.scale(image, (width, height))
                         screen.blit(scaled_image, (0, 0)) 
                         pygame.display.flip()
-                        led_signal()
+                        
                     
                     except Exception as load_error:
                         print(f"Failed to load image: {load_error}")
                     
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
-
+            time.sleep(5)
+            led_signal()
             next_button_pressed = False
 
         if preview_button_pressed:
@@ -184,6 +195,10 @@ try:
                 preview_button_pressed = False
 
             if preview_number > frame_number:
+                preview_number = 0
+                preview_button_pressed = False
+
+            if preview_number > 20:
                 preview_number = 0
                 preview_button_pressed = False
 
