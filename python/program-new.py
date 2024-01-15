@@ -33,7 +33,8 @@ picam2 = Picamera2()
 print("picam init")
 
 zoom = 0.95 # copped image /1
-
+offset_tweak_left = 0  # Change this value as needed
+offset_tweak_top = 0  # Change this value as needed
 
 
 
@@ -73,14 +74,20 @@ size = picam2.capture_metadata()['ScalerCrop'][2:]
 full_res = picam2.camera_properties['PixelArraySize']
 picam2.capture_metadata()
 size = [int(s * zoom) for s in size]
-offset = [(r - s) // 2 for r, s in zip(full_res, size)]
-# Set initial offset values
-print(f"offset : {offset}")
-#offset_tweak_width = 0  # Change this value as needed
-#offset_tweak_height = 0  # Change this value as needed
-#offset_tweak = (offset_tweak_width, offset_tweak_height)
+#offset = [(r - s) // 2 for r, s in zip(full_res, size)]
+#picam2.set_controls({"ScalerCrop": offset + size})
 
+# Calculate offset based on the initial values
+offset_width = (full_res[0] - size[0]) // 2 + offset_tweak_left
+offset_height = (full_res[1] - size[1]) // 2 + offset_tweak_top
+
+# Create a list with the individual offset values
+offset = [offset_width, offset_height]
+print(f"offset : {offset}")
+# Set controls with individual offset values
 picam2.set_controls({"ScalerCrop": offset + size})
+
+
 
 
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
@@ -195,7 +202,7 @@ try:
 
             if preview_number > frame_number:
                 preview_number = 0
-                
+
                 preview_button_pressed = False
 
             if preview_number > 20:
