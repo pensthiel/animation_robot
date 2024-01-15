@@ -101,6 +101,9 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         # Fill the screen with a white background
         screen.fill((255, 255, 255))
         pygame.display.flip()  # Update the display
+        screen.fill((255, 255, 255))
+        pygame.display.flip()  # Update the display a second time
+        time.sleep(0.05)
 
         picam2.capture_metadata()
         picam2.capture_file(filepath)
