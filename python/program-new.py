@@ -97,8 +97,11 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         print(filename)
         filepath = os.path.join(directory, filename)
         print(filepath)
+
+        # Fill the screen with a white background
         screen.fill((255, 255, 255))
-        time.sleep(2)
+        pygame.display.flip()  # Update the display
+
         picam2.capture_metadata()
         picam2.capture_file(filepath)
         frame_to_display = filepath
@@ -156,7 +159,6 @@ try:
         if next_button_pressed:
             print("next frame starts")
             try:
-                screen.fill((255, 255, 255))
                 save_frame()
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
