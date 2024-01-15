@@ -17,6 +17,7 @@ GPIO.setup(18, GPIO.OUT)  # output (LED)  WHITE
 GPIO.setup(24, GPIO.OUT)  # RED
 GPIO.setup(27, GPIO.OUT)  # YELLOW
 GPIO.setup(23, GPIO.OUT)  # GREEN
+GPIO.setup(26, GPIO.OUT)  # big yellow
 GPIO.setup(16, GPIO.OUT)  # IR
 
 # Initialize Pygame
@@ -101,12 +102,14 @@ def LEDS_on():
     GPIO.output(24, GPIO.HIGH)
     GPIO.output(27, GPIO.HIGH)
     GPIO.output(23, GPIO.HIGH)
+    GPIO.output(26, GPIO.HIGH)
 
 def LEDS_off():
     GPIO.output(18, GPIO.LOW)
     GPIO.output(24, GPIO.LOW)
     GPIO.output(27, GPIO.LOW)
     GPIO.output(23, GPIO.LOW)
+    GPIO.output(26, GPIO.LOW)
 
 def led_signal():
     LEDS_off()
