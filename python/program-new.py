@@ -232,12 +232,12 @@ try:
                 print("can't preview: Directory empty")
                 preview_button_pressed = False
 
-            if preview_number > frame_number:
+            if preview_number > (frame_number - 1):
                 preview_number = 0
                 pygame.mixer.sound.stop()
                 preview_button_pressed = False
 
-            if preview_number > 20:
+            if preview_number > 50:
                 preview_number = 0
                 pygame.mixer.sound.stop()
                 preview_button_pressed = False
