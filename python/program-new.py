@@ -120,10 +120,11 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         # Fill the screen with a white background
         screen.fill((255, 255, 255))
         pygame.display.flip()  # Update the display
-        time.sleep(0.05)
+        time.sleep(0.1)
         picam2.capture_metadata()
         screen.fill((255, 255, 255))
         pygame.display.flip()  # Update the display a second time
+        time.sleep(0.1)
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
@@ -202,7 +203,7 @@ try:
                     
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
-            time.sleep(1)
+
             led_signal()
             next_button_pressed = False
 
