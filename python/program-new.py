@@ -37,6 +37,12 @@ height = screen_info.current_h
 picam2 = Picamera2()
 print("picam init")
 
+
+
+# Set the current working directory to the script's location
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
 bell = pygame.mixer.Sound("samples/bell.mp3")
 music = pygame.mixer.Sound("samples/music.mp3")
 #pygame.mixer.Sound.play(bell)
@@ -45,10 +51,6 @@ print("bell sound file path:", os.path.abspath("samples/bell.mp3"))
 print("music sound file path:", os.path.abspath("samples/music.mp3"))
 #pygame.mixer.Sound.play(music)
 #pygame.mixer.music.stop()
-
-# Set the current working directory to the script's location
-script_dir = os.path.dirname(os.path.abspath(__file__))
-os.chdir(script_dir)
 
 # Generate a random integer from 1 to 1000
 rand_int = random.randint(1, 1000)
