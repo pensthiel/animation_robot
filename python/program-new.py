@@ -91,9 +91,10 @@ def reload_offsets():
     print(f"offset : {offset}")
     # Set controls with individual offset values
     picam2.set_controls({"ScalerCrop": offset + size})
+    picam2.stop_preview()
     picam2.start_preview(Preview.DRM)
     time.sleep(1)
-    picam2.stop_preview(Preview.DRM)
+    picam2.stop_preview()
 
 
 
