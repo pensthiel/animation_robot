@@ -41,7 +41,8 @@ bell = pygame.mixer.Sound("samples/bell.mp3")
 music = pygame.mixer.Sound("samples/music.mp3")
 #pygame.mixer.Sound.play(bell)
 #pygame.mixer.music.stop()
-
+print("bell sound file path:", os.path.abspath("samples/bell.mp3"))
+print("music sound file path:", os.path.abspath("samples/music.mp3"))
 #pygame.mixer.Sound.play(music)
 #pygame.mixer.music.stop()
 
@@ -177,7 +178,10 @@ try:
 
         if next_button_pressed:
             print("next frame starts")
-            pygame.mixer.Sound.play(bell)
+            try:
+                pygame.mixer.Sound.play(bell)
+            except Exception as e:
+                print("Error playing sound:", e)
             try:
                 save_frame()
             except Exception as next_frame_error:
@@ -198,12 +202,14 @@ try:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
             time.sleep(1)
             led_signal()
-            pygame.mixer.music.stop()
             next_button_pressed = False
 
         if preview_button_pressed:
             print("preview starts")
-            pygame.mixer.Sound.play(music)
+            try:
+                pygame.mixer.Sound.play(music)
+            except Exception as e:
+                print("Error playing sound:", e)
             filepath2 = os.path.join(frames_d, f"frame_{preview_number}.jpg")
             preview_number += 1
             print(filepath2)
@@ -231,7 +237,7 @@ try:
 
             if preview_number > 20:
                 preview_number = 0
-                pygame.mixer.music.stop()
+                pygame.mixer.sound.stop()
                 preview_button_pressed = False
 
         for event in pygame.event.get():
