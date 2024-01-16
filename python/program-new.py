@@ -9,6 +9,10 @@ import time
 import pygame
 from pygame.locals import *
 
+zoom = 0.75 # copped image /1
+offset_tweak_left = 300  # Change this value as needed
+offset_tweak_top = 0  # Change this value as needed
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # PREVIEW
@@ -20,6 +24,7 @@ GPIO.setup(23, GPIO.OUT)  # GREEN
 GPIO.setup(26, GPIO.OUT)  # big yellow
 GPIO.setup(16, GPIO.OUT)  # IR
 
+pygame.mixer.pre_init()
 # Initialize Pygame
 pygame.init()
 screen_size = (0, 0)  # Set to (0, 0) for full screen
@@ -32,11 +37,13 @@ height = screen_info.current_h
 picam2 = Picamera2()
 print("picam init")
 
-zoom = 0.75 # copped image /1
-offset_tweak_left = 320  # Change this value as needed
-offset_tweak_top = 200  # Change this value as needed
+bell = pygame.mixer.Sound("samples/bell.mp3")
+music = pygame.mixer.Sound("samples/music.mp3")
+#pygame.mixer.Sound.play(bell)
+#pygame.mixer.music.stop()
 
-
+#pygame.mixer.Sound.play(music)
+#pygame.mixer.music.stop()
 
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -98,6 +105,7 @@ picam2.set_controls({"ScalerCrop": offset + size})
 
 
 
+
 def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
     try:
         global frame_number, frame_to_display  # Declare both as global
@@ -109,11 +117,10 @@ def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
         # Fill the screen with a white background
         screen.fill((255, 255, 255))
         pygame.display.flip()  # Update the display
+        time.sleep(0.05)
+        picam2.capture_metadata()
         screen.fill((255, 255, 255))
         pygame.display.flip()  # Update the display a second time
-        time.sleep(0.05)
-
-        picam2.capture_metadata()
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
@@ -170,6 +177,7 @@ try:
 
         if next_button_pressed:
             print("next frame starts")
+            pygame.mixer.Sound.play(bell)
             try:
                 save_frame()
             except Exception as next_frame_error:
@@ -188,12 +196,14 @@ try:
                     
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
-            time.sleep(5)
+            time.sleep(1)
             led_signal()
+            pygame.mixer.music.stop()
             next_button_pressed = False
 
         if preview_button_pressed:
             print("preview starts")
+            pygame.mixer.Sound.play(music)
             filepath2 = os.path.join(frames_d, f"frame_{preview_number}.jpg")
             preview_number += 1
             print(filepath2)
@@ -216,11 +226,12 @@ try:
 
             if preview_number > frame_number:
                 preview_number = 0
-
+                pygame.mixer.music.stop()
                 preview_button_pressed = False
 
             if preview_number > 20:
                 preview_number = 0
+                pygame.mixer.music.stop()
                 preview_button_pressed = False
 
         for event in pygame.event.get():
@@ -286,6 +297,7 @@ try:
 
 finally:
     # Release resources
+    pygame.mixer.quit()
     GPIO.cleanup()
     picam2.stop()
     pygame.quit()
