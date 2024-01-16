@@ -33,8 +33,8 @@ picam2 = Picamera2()
 print("picam init")
 
 zoom = 0.75 # copped image /1
-offset_tweak_left = 135  # Change this value as needed
-offset_tweak_top = -120  # Change this value as needed
+offset_tweak_left = 320  # Change this value as needed
+offset_tweak_top = 200  # Change this value as needed
 
 
 
@@ -73,30 +73,25 @@ print("picam2 started")
 # Wait for 2 seconds to allow the camera to initialize
 time.sleep(2)
 
-def reload_offsets():
-    picam2.capture_metadata()
-    size = picam2.capture_metadata()['ScalerCrop'][2:]
-    full_res = picam2.camera_properties['PixelArraySize']
-    picam2.capture_metadata()
-    size = [int(s * zoom) for s in size]
-    #offset = [(r - s) // 2 for r, s in zip(full_res, size)]
-    #picam2.set_controls({"ScalerCrop": offset + size})
 
-    # Calculate offset based on the initial values
-    offset_width = (full_res[0] - size[0]) // 2 + offset_tweak_left
-    offset_height = (full_res[1] - size[1]) // 2 + offset_tweak_top
+picam2.capture_metadata()
+size = picam2.capture_metadata()['ScalerCrop'][2:]
+full_res = picam2.camera_properties['PixelArraySize']
+picam2.capture_metadata()
+size = [int(s * zoom) for s in size]
+#offset = [(r - s) // 2 for r, s in zip(full_res, size)]
+#picam2.set_controls({"ScalerCrop": offset + size})
 
-    # Create a list with the individual offset values
-    offset = [offset_width, offset_height]
-    print(f"offset : {offset}")
-    # Set controls with individual offset values
-    picam2.set_controls({"ScalerCrop": offset + size})
-    picam2.stop_preview()
-    picam2.start_preview(Preview.DRM)
-    pygame.display.flip()
-    time.sleep(1)
-    picam2.stop_preview()
-    
+# Calculate offset based on the initial values
+offset_width = (full_res[0] - size[0]) // 2 + offset_tweak_left
+offset_height = (full_res[1] - size[1]) // 2 + offset_tweak_top
+
+# Create a list with the individual offset values
+offset = [offset_width, offset_height]
+print(f"offset : {offset}")
+# Set controls with individual offset values
+picam2.set_controls({"ScalerCrop": offset + size})
+
 
 
 
@@ -151,7 +146,7 @@ def led_signal():
     time.sleep(0.05)
     LEDS_on()
 
-reload_offsets()
+
 screen.fill((200, 150, 250))
 LEDS_on()
 try:
@@ -249,8 +244,8 @@ try:
                     print("up")
                     #offset_tweak_left = 320  # Change this value as needed
                     offset_tweak_top += 2
-                    reload_offsets()
-                    print(f"top +2 : {offset_tweak_top}")
+
+                    print(f": {offset_tweak_top}")
                     w_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_w:
                     w_key_pressed = False  # Reset the variable when the 'Y' key is released
@@ -259,8 +254,8 @@ try:
                 if not a_key_pressed:
                     print("left")
                     offset_tweak_left += 2  # Change this value as needed
-                    reload_offsets()
-                    print(f"left +2 : {offset_tweak_left}")
+       
+                    print(f"left: {offset_tweak_left}")
                     a_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_a:
                     a_key_pressed = False  # Reset the variable when the 'Y' key is released
@@ -269,8 +264,8 @@ try:
                 if not d_key_pressed:
                     print("right")
                     offset_tweak_left -= 2 # Change this value
-                    reload_offsets()
-                    print(f"left -2 : {offset_tweak_left}")
+    
+                    print(f"left: {offset_tweak_left}")
                     d_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_d:
                     d_key_pressed = False  # Reset the variable when the 'Y' key is released
@@ -280,8 +275,8 @@ try:
                     print("down")
                     #offset_tweak_left -= 2 # Change this value
                     offset_tweak_top -= 2
-                    reload_offsets()
-                    print(f"top -2 : {offset_tweak_top}")
+
+                    print(offset_tweak_top)
                     s_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_s:
                     s_key_pressed = False  # Reset the variable when the 'Y' key is released
