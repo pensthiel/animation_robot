@@ -235,7 +235,7 @@ try:
 
             if preview_number > (frame_number - 1):
                 preview_number = 0
-                pygame.mixer.sound.stop()
+                pygame.mixer.sound.stop(music)
                 preview_button_pressed = False
 
             if preview_number > 50:
@@ -302,6 +302,8 @@ try:
                     s_key_pressed = False  # Reset the variable when the 'Y' key is released
             
 
+except KeyboardInterrupt:
+    pass  # Handle the Ctrl+C interrupt to gracefully exit the program
 
 
 finally:
