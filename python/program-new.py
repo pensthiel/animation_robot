@@ -33,8 +33,8 @@ picam2 = Picamera2()
 print("picam init")
 
 zoom = 0.75 # copped image /1
-offset_tweak_left = 320  # Change this value as needed
-offset_tweak_top = 200  # Change this value as needed
+offset_tweak_left = 135  # Change this value as needed
+offset_tweak_top = -120  # Change this value as needed
 
 
 
@@ -247,6 +247,7 @@ try:
                     #offset_tweak_left = 320  # Change this value as needed
                     offset_tweak_top += 2
                     reload_offsets()
+                    print(f"top +2 : {offset_tweak_top}")
                     w_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_w:
                     w_key_pressed = False  # Reset the variable when the 'Y' key is released
@@ -256,6 +257,7 @@ try:
                     print("left")
                     offset_tweak_left += 2  # Change this value as needed
                     reload_offsets()
+                    print(f"left +2 : {offset_tweak_left}")
                     a_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_a:
                     a_key_pressed = False  # Reset the variable when the 'Y' key is released
@@ -265,6 +267,7 @@ try:
                     print("right")
                     offset_tweak_left -= 2 # Change this value
                     reload_offsets()
+                    print(f"left -2 : {offset_tweak_left}")
                     d_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_d:
                     d_key_pressed = False  # Reset the variable when the 'Y' key is released
@@ -275,6 +278,7 @@ try:
                     #offset_tweak_left -= 2 # Change this value
                     offset_tweak_top -= 2
                     reload_offsets()
+                    print(f"top -2 : {offset_tweak_top}")
                     s_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_s:
                     s_key_pressed = False  # Reset the variable when the 'Y' key is released
