@@ -11,7 +11,7 @@ from pygame.locals import *
 
 zoom = 0.75 # copped image /1
 offset_tweak_left = 300  # Change this value as needed
-offset_tweak_top = 0  # Change this value as needed
+offset_tweak_top = 200  # Change this value as needed
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
@@ -234,7 +234,7 @@ try:
 
             if preview_number > frame_number:
                 preview_number = 0
-                pygame.mixer.music.stop()
+                pygame.mixer.sound.stop()
                 preview_button_pressed = False
 
             if preview_number > 20:
