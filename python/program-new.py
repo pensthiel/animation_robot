@@ -93,8 +93,10 @@ def reload_offsets():
     picam2.set_controls({"ScalerCrop": offset + size})
     picam2.stop_preview()
     picam2.start_preview(Preview.DRM)
+    pygame.display.flip()
     time.sleep(1)
     picam2.stop_preview()
+    
 
 
 
