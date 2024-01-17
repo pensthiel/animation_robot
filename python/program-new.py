@@ -232,11 +232,13 @@ try:
             else:
                 print("can't preview: Directory empty")
                 preview_button_pressed = False
-            
-            if preview_number == frame_number:
-                preview_number = 0
-                pygame.mixer.sound.stop(music)
-                preview_button_pressed = False
+            try:
+                if preview_number == frame_number:
+                    preview_number = 0
+                    pygame.mixer.sound.stop()
+                    preview_button_pressed = False
+            except Exception as e:
+                print(f"error stopping preview: {e}")
 
             if preview_number == 50:
                 preview_number = 0
