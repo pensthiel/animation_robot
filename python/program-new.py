@@ -235,14 +235,14 @@ try:
             try:
                 if preview_number == frame_number:
                     preview_number = 0
-                    pygame.mixer.sound.stop()
+                    pygame.mixer.stop()
                     preview_button_pressed = False
             except Exception as e:
                 print(f"error stopping preview: {e}")
 
             if preview_number == 50:
                 preview_number = 0
-                pygame.mixer.sound.stop()
+                pygame.mixer.stop()
                 preview_button_pressed = False
 
         for event in pygame.event.get():
