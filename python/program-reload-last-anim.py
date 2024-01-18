@@ -9,8 +9,6 @@ import time
 import pygame
 from pygame.locals import *
 
-#NUMBER OF PICS IN RELOAD FOLDER
-frame_number = 24
 
 
 zoom = 0.75 # copped image /1
@@ -46,6 +44,15 @@ print("picam init")
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
+
+# NUMBER OF FILES IN THE "RELOAD" FOLDER
+reload_folder = os.path.join(script_dir, "reload")
+file_count = 0
+
+for root_dir, cur_dir, files in os.walk(reload_folder):
+    file_count += len(files)
+
+print('File count in', reload_folder, ':', file_count)
 
 bell = pygame.mixer.Sound("samples/bell.mp3")
 music = pygame.mixer.Sound("samples/music.mp3")
