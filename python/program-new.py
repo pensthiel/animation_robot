@@ -13,6 +13,10 @@ from pygame.locals import *
 zoom = 0.75 # copped image /1
 offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -10  # Change this value as needed
+color_temp = 3200 # 3200 = tungsten, 5600 = daylight, 6500 = cloudy, 7500 = shade, 8500 = cool white, 9500 = blue white, 10000 = blue sky, 20000 = blue water
+exp = 13800
+gain = 1.0
+focus = 1
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
@@ -108,7 +112,7 @@ metadata = picam2.capture_metadata()
 controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains","ColourTemperature","LensPosition"]}
 print(controls)
 # Set controls with individual offset values
-#picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": 10000, "AnalogueGain": 1.0,"AfMode": controls.AfModeEnum.Manual, "LensPosition": 0.0}})
+picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": exp, "AnalogueGain": gain,"ColourGains":(1.6,2.7),"AfMode": controls.AfModeEnum.Manual, "LensPosition": focus,"ColourTemperature":color_temp}})
 
 
 
