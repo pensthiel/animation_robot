@@ -50,6 +50,7 @@ frame_number = 0
 
 for root_dir, cur_dir, files in os.walk(reload_folder):
     frame_number += len(files)
+    frame_number -= 1
 
 print('File count in', reload_folder, ':', frame_number)
 
