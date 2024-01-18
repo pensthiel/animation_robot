@@ -112,7 +112,7 @@ metadata = picam2.capture_metadata()
 controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains","ColourTemperature","LensPosition"]}
 print(controls)
 # Set controls with individual offset values
-picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": exp, "AnalogueGain": gain,"ColourGains":(1.6,2.7),"AfMode": controls.AfModeEnum.Manual, "LensPosition": focus,"ColourTemperature":color_temp}})
+picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": exp, "AnalogueGain": gain,"ColourGains":(1.6,2.7),"AfMode": controls.AfModeEnum.Manual, "LensPosition": focus,"ColourTemperature":color_temp})
 
 
 
