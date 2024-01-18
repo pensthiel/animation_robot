@@ -13,7 +13,7 @@ from pygame.locals import *
 zoom = 0.75 # copped image /1
 offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -10  # Change this value as needed
-color_temp = 3200 # 3200 = tungsten, 5600 = daylight, 6500 = cloudy, 7500 = shade, 8500 = cool white, 9500 = blue white, 10000 = blue sky, 20000 = blue water
+color_temp = libcamera.controls.AwbModeEnum.Indoor
 exp = 13800
 gain = 1.0
 focus = 1
@@ -112,7 +112,7 @@ metadata = picam2.capture_metadata()
 controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains","ColourTemperature","LensPosition"]}
 print(controls)
 # Set controls with individual offset values
-picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": exp, "AnalogueGain": gain,"ColourGains":(1.6,2.7),"AfMode": 0, "LensPosition": focus,"ColourTemperature":color_temp})
+picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": exp, "AnalogueGain": gain,"AfMode": 0, "LensPosition": focus,"AwbEnabled": 1,"AwbMode":color_temp})
 
 
 
