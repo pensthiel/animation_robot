@@ -17,8 +17,8 @@ offset_tweak_top = -10  # Change this value as needed
 exp = 13800
 gain = 1.0
 focus = 1
-red = 1.6
-blue = 1
+red = 2
+blue = 2
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
