@@ -10,8 +10,10 @@ import pygame
 from pygame.locals import *
 
 zoom = 0.75 # copped image /1
-offset_tweak_left = 195  # Change this value as needed
-offset_tweak_top = -60  # Change this value as needed
+offset_tweak_left = 190  # Change this value as needed
+offset_tweak_top = -40  # Change this value as needed
+
+pygame.mouse.set_visible(False) # Hide the mouse cursor
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
