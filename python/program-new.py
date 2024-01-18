@@ -164,7 +164,18 @@ def led_signal():
 
 screen.fill((200, 150, 250))
 LEDS_on()
-preview_button_pressed = True
+if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
+    try:
+        image = pygame.image.load(frame_to_display)
+        scaled_image = pygame.transform.scale(image, (width, height))
+        screen.blit(scaled_image, (0, 0)) 
+        pygame.display.flip()
+        
+    
+    except Exception as load_error:
+        print(f"Failed to load image: {load_error}")
+LEDS_on()
+
 try:
     while True:
         pygame.display.flip()
