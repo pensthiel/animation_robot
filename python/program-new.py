@@ -17,7 +17,7 @@ offset_tweak_top = -10  # Change this value as needed
 exp = 13800
 gain = 1.0
 focus = 1
-red = 2
+red = 1.5
 blue = 2
 
 GPIO.setmode(GPIO.BCM)
