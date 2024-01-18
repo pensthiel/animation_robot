@@ -4,16 +4,15 @@
 from picamera2 import Picamera2, Preview
 import RPi.GPIO as GPIO
 import os
-import random
 import time
 import pygame
 from pygame.locals import *
 
+
+
 zoom = 0.75 # copped image /1
 offset_tweak_left = 185  # Change this value as needed
-offset_tweak_top = -15  # Change this value as needed
-
-
+offset_tweak_top = -10  # Change this value as needed
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
@@ -45,6 +44,15 @@ print("picam init")
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
+# NUMBER OF FILES IN THE "RELOAD" FOLDER
+reload_folder = os.path.join(script_dir, "reload")
+frame_number = 0
+
+for root_dir, cur_dir, files in os.walk(reload_folder):
+    frame_number += len(files)
+
+print('File count in', reload_folder, ':', frame_number)
+
 bell = pygame.mixer.Sound("samples/bell.mp3")
 music = pygame.mixer.Sound("samples/music.mp3")
 #pygame.mixer.Sound.play(bell)
@@ -54,13 +62,7 @@ print("music sound file path:", os.path.abspath("samples/music.mp3"))
 #pygame.mixer.Sound.play(music)
 #pygame.mixer.music.stop()
 
-# Generate a random integer from 1 to 1000
-rand_int = random.randint(1, 1000)
-print(f"Random integer between 1 and 1000: {rand_int}")
 
-# Create 'frames' directory if it doesn't exist
-os.makedirs(f"frames{rand_int}")
-frames_d = (f"frames{rand_int}")
 
 y_key_pressed = False
 w_key_pressed = False
@@ -74,7 +76,7 @@ filepath = None
 filepath2 = None
 
 # Frame count initialization
-frame_number = 0
+
 preview_number = 0
 
 
@@ -111,12 +113,12 @@ picam2.set_controls({"ScalerCrop": offset + size})
 
 
 
-def save_frame(directory=frames_d, prefix='frame', file_format='jpg'):
+def save_frame(prefix='frame', file_format='jpg'):
     try:
         global frame_number, frame_to_display  # Declare both as global
         filename = f"{prefix}_{frame_number}.{file_format}"
         print(filename)
-        filepath = os.path.join(directory, filename)
+        filepath = os.path.join("reload", filename)
         print(filepath)
 
         # Fill the screen with a white background
@@ -159,9 +161,10 @@ def led_signal():
     time.sleep(0.05)
     LEDS_on()
 
-pygame.mouse.set_visible(False) # Hide the mouse cursor
+
 screen.fill((200, 150, 250))
 LEDS_on()
+preview_button_pressed = True
 try:
     while True:
         pygame.display.flip()
@@ -215,7 +218,7 @@ try:
                 pygame.mixer.Sound.play(music)
             except Exception as e:
                 print("Error playing sound:", e)
-            filepath2 = os.path.join(frames_d, f"frame_{preview_number}.jpg")
+            filepath2 = os.path.join("reload", f"frame_{preview_number}.jpg")
             preview_number += 1
             print(filepath2)
             if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
@@ -317,4 +320,3 @@ finally:
     picam2.stop()
     pygame.quit()
     quit()
-
