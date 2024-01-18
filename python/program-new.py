@@ -11,7 +11,7 @@ from pygame.locals import *
 
 
 zoom = 0.75 # copped image /1
-offset_tweak_left = 170  # Change this value as needed
+offset_tweak_left = 140  # Change this value as needed
 offset_tweak_top = -20  # Change this value as needed
 
 GPIO.setmode(GPIO.BCM)
