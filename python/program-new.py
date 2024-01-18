@@ -15,10 +15,10 @@ offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -10  # Change this value as needed
 
 exp = 13800
-gain = 1.0
+gain = 2.5
 focus = 1
-red = 1.8
-blue = 2.2
+red = 2.1
+blue = 2.1
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
@@ -147,7 +147,7 @@ def save_frame(prefix='frame', file_format='jpg'):
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
 
-    
+
 
 def debounce(button_pin):
     time.sleep(0.05)  # Adjust the sleep time based on your requirements
@@ -182,10 +182,10 @@ try:
     print(filepath)
     image = pygame.image.load(filepath)
     scaled_image = pygame.transform.scale(image, (width, height))
-    screen.blit(scaled_image, (0, 0)) 
+    screen.blit(scaled_image, (0, 0))
     pygame.display.flip()
- 
-    
+
+
 except Exception as load_error:
     print(f"Failed to load image: {load_error}")
 LEDS_on()
@@ -195,11 +195,11 @@ try:
         pygame.display.flip()
 
 
-       
+
         if not debounce(17):
             print("next button pressed")
             next_button_pressed = True
-        
+
         if not debounce(21):
             print("exit button pressed")
             break
@@ -207,7 +207,7 @@ try:
         if not debounce(22):
             print("preview button pressed")
             preview_button_pressed = True
-        
+
 
         if next_button_pressed:
             print("next frame starts")
@@ -224,13 +224,13 @@ try:
                     try:
                         image = pygame.image.load(frame_to_display)
                         scaled_image = pygame.transform.scale(image, (width, height))
-                        screen.blit(scaled_image, (0, 0)) 
+                        screen.blit(scaled_image, (0, 0))
                         pygame.display.flip()
-                        
-                    
+
+
                     except Exception as load_error:
                         print(f"Failed to load image: {load_error}")
-                    
+
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
 
@@ -255,10 +255,10 @@ try:
                         screen.blit(scaled_image, (0, 0))
                         print(filepath2 + " displayed")
                         time.sleep(0.1)
-                
+
                 except Exception as file_error:
                     print("Error occurred while loading the image.")   # Use error handling to catch and report any issues smoothly.
-          
+
             else:
                 print("can't preview: Directory empty")
                 preview_button_pressed = False
@@ -280,17 +280,17 @@ try:
                 led_signal()
                 print("q to quit")
                 break
-            
+
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                 print("y key event detected")
                 if not y_key_pressed:
                     print("next frame triggered with y key")
                     next_button_pressed = True
                     y_key_pressed = True  # Set the variable to True after the action
-                    
+
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
-            
+
             if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
                 if not w_key_pressed:
                     print("up")
@@ -306,7 +306,7 @@ try:
                 if not a_key_pressed:
                     print("left")
                     offset_tweak_left += 2  # Change this value as needed
-       
+
                     print(f"left: {offset_tweak_left}")
                     a_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_a:
@@ -316,7 +316,7 @@ try:
                 if not d_key_pressed:
                     print("right")
                     offset_tweak_left -= 2 # Change this value
-    
+
                     print(f"left: {offset_tweak_left}")
                     d_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_d:
@@ -332,7 +332,7 @@ try:
                     s_key_pressed = True  # Set the variable to True after the actio
                 if event.type == pygame.KEYUP and event.key == pygame.K_s:
                     s_key_pressed = False  # Reset the variable when the 'Y' key is released
-            
+
 
 except KeyboardInterrupt:
     pass  # Handle the Ctrl+C interrupt to gracefully exit the program
