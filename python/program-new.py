@@ -104,6 +104,7 @@ offset_height = (full_res[1] - size[1]) // 2 + offset_tweak_top
 # Create a list with the individual offset values
 offset = [offset_width, offset_height]
 print(f"offset : {offset}")
+metadata = picam2.capture_metadata()
 controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains","ColourTemperature","LensPosition"]}
 print(controls)
 # Set controls with individual offset values
