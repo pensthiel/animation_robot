@@ -12,7 +12,7 @@ from pygame.locals import *
 
 zoom = 0.75 # copped image /1
 offset_tweak_left = 160  # Change this value as needed
-offset_tweak_top = -1500  # Change this value as needed
+offset_tweak_top = -120  # Change this value as needed
 
 exp = 13800
 gain = 2.5
@@ -270,7 +270,7 @@ try:
             except Exception as e:
                 print(f"error stopping preview: {e}")
 
-            if preview_number == 1000:
+            if preview_number == 5000:
                 preview_number = 0
                 pygame.mixer.stop()
                 preview_button_pressed = False
