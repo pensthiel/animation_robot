@@ -217,43 +217,7 @@ try:
             led_signal()
             next_button_pressed = False
 
-        if preview_button_pressed:
-            print("preview starts")
-            try:
-                pygame.mixer.Sound.play(music)
-            except Exception as e:
-                print("Error playing sound:", e)
-            filepath2 = os.path.join("reload", f"frame_{preview_number}.jpg")
-            preview_number += 1
-            print(filepath2)
-            if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
-                try:
-                    if not image is None and not image.get_rect().size == (0, 0):
-                        image = pygame.image.load(filepath2)
-                        scaled_image = pygame.transform.scale(image, (width, height))
-                        print(filepath2 + " loaded")
-                        screen.blit(scaled_image, (0, 0))
-                        print(filepath2 + " displayed")
-                        time.sleep(0.1)
-
-                except Exception as file_error:
-                    print("Error occurred while loading the image.")   # Use error handling to catch and report any issues smoothly.
-
-            else:
-                print("can't preview: Directory empty")
-                preview_button_pressed = False
-            try:
-                if preview_number == frame_number:
-                    preview_number = 0
-                    pygame.mixer.stop()
-                    preview_button_pressed = False
-            except Exception as e:
-                print(f"error stopping preview: {e}")
-
-            if preview_number == 5000:
-                preview_number = 0
-                pygame.mixer.stop()
-                preview_button_pressed = False
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):

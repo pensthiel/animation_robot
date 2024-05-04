@@ -11,7 +11,7 @@ from pygame.locals import *
 
 folder_name="reload" # Folder name to load images from
 
-delay = 0.2 # 0.2 = 20% of a second i think ? = 5fps ?
+delay = 0.2 # 0.2 is 20% of a second I think ? = 5fps i guess
 
 
 pygame.mixer.pre_init()
