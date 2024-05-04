@@ -9,7 +9,6 @@ import pygame
 from pygame.locals import *
 
 
-
 zoom = 0.75 # copped image /1
 offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -120  # Change this value as needed
@@ -46,7 +45,7 @@ frame_to_display = None
 filepath = None
 filepath2 = None
 
-# Frame count initialization
+# Frame count initializations
 
 preview_number = 0
 
