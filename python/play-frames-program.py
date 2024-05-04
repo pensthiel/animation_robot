@@ -9,7 +9,9 @@ import pygame
 from pygame.locals import *
 
 
-folder_name="reload"
+folder_name="reload" # Folder name to load images from
+
+delay = 0.2 # 0.2 = 20% of a second i think ? = 5fps ?
 
 
 pygame.mixer.pre_init()
@@ -83,7 +85,7 @@ try:
                 screen.blit(scaled_image, (0, 0))
                 pygame.display.flip()
                 print(filepath2 + " displayed")
-                time.sleep(0.2)
+                time.sleep(delay)
 
             except Exception as file_error:
                print(f"Error occurred while loading the image. {file_error}")   # Use error handling to catch and report any issues smoothly.
