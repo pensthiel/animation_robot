@@ -198,6 +198,7 @@ try:
 
             led_signal()
             next_button_pressed = False
+            print("next_button_pressed = False")
 
         
 
