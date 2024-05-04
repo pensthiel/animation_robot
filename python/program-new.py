@@ -23,12 +23,7 @@ blue = 2.1
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # PREVIEW
-GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # test/quit button
-GPIO.setup(18, GPIO.OUT)  # output (LED)  WHITE
-GPIO.setup(24, GPIO.OUT)  # RED
-GPIO.setup(27, GPIO.OUT)  # YELLOW
-GPIO.setup(23, GPIO.OUT)  # GREEN
-GPIO.setup(26, GPIO.OUT)  # big yellow
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # quit button
 GPIO.setup(16, GPIO.OUT)  # IR
 
 pygame.mixer.pre_init()
@@ -72,10 +67,7 @@ print("music sound file path:", os.path.abspath("samples/music.mp3"))
 
 
 y_key_pressed = False
-w_key_pressed = False
-a_key_pressed = False
-s_key_pressed = False
-d_key_pressed = False
+
 frame_to_display = None
 next_button_pressed = False
 preview_button_pressed = False
@@ -291,47 +283,11 @@ try:
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
-                if not w_key_pressed:
-                    print("up")
-                    #offset_tweak_left = 320  # Change this value as needed
-                    offset_tweak_top += 2
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                print(f": {quit}")
+                break
+            
 
-                    print(f": {offset_tweak_top}")
-                    w_key_pressed = True  # Set the variable to True after the actio
-                if event.type == pygame.KEYUP and event.key == pygame.K_w:
-                    w_key_pressed = False  # Reset the variable when the 'Y' key is released
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
-                if not a_key_pressed:
-                    print("left")
-                    offset_tweak_left += 2  # Change this value as needed
-
-                    print(f"left: {offset_tweak_left}")
-                    a_key_pressed = True  # Set the variable to True after the actio
-                if event.type == pygame.KEYUP and event.key == pygame.K_a:
-                    a_key_pressed = False  # Reset the variable when the 'Y' key is released
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_d:
-                if not d_key_pressed:
-                    print("right")
-                    offset_tweak_left -= 2 # Change this value
-
-                    print(f"left: {offset_tweak_left}")
-                    d_key_pressed = True  # Set the variable to True after the actio
-                if event.type == pygame.KEYUP and event.key == pygame.K_d:
-                    d_key_pressed = False  # Reset the variable when the 'Y' key is released
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_s:
-                if not s_key_pressed:
-                    print("down")
-                    #offset_tweak_left -= 2 # Change this value
-                    offset_tweak_top -= 2
-
-                    print(offset_tweak_top)
-                    s_key_pressed = True  # Set the variable to True after the actio
-                if event.type == pygame.KEYUP and event.key == pygame.K_s:
-                    s_key_pressed = False  # Reset the variable when the 'Y' key is released
 
 
 except KeyboardInterrupt:
