@@ -11,11 +11,6 @@ from pygame.locals import *
 
 folder_name="reload"
 
-zoom = 0.75 # copped image /1
-offset_tweak_left = 160  # Change this value as needed
-offset_tweak_top = -120  # Change this value as needed
-
-
 
 pygame.mixer.pre_init()
 # Initialize Pygame
