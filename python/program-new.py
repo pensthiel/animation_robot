@@ -65,7 +65,6 @@ y_key_pressed = False
 
 frame_to_display = None
 next_button_pressed = False
-
 filepath = None
 filepath2 = None
 
@@ -113,7 +112,7 @@ picam2.set_controls({"ScalerCrop": offset + size,"ExposureTime": exp, "AnalogueG
 
 def save_frame(prefix='frame', file_format='jpg'):
     try:
-        global frame_number, frame_to_display  # Declare both as global
+        global frame_number,frame_to_display  # Declare both as global
         filename = f"{prefix}_{frame_number}.{file_format}"
         print(filename)
         filepath = os.path.join("reload", filename)
@@ -155,20 +154,7 @@ def led_signal():
 
 screen.fill((200, 150, 250))
 LEDS_on()
-try:
-    filename = f"frame_{frame_number}.jpg"
-    print(filename)
-    filepath = os.path.join("reload", filename)
-    print(filepath)
-    image = pygame.image.load(filepath)
-    scaled_image = pygame.transform.scale(image, (width, height))
-    screen.blit(scaled_image, (0, 0))
-    pygame.display.flip()
 
-
-except Exception as load_error:
-    print(f"Failed to load image: {load_error}")
-LEDS_on()
 
 try:
     while True:
