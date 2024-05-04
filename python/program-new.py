@@ -264,7 +264,7 @@ try:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                 led_signal()
                 print("q to quit")
-                break
+                exit()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                 print("y key event detected")
