@@ -187,6 +187,7 @@ try:
                         scaled_image = pygame.transform.scale(image, (width, height))
                         screen.blit(scaled_image, (0, 0))
                         pygame.display.flip()
+                        print("frame displayed")
 
 
                     except Exception as load_error:
@@ -215,7 +216,7 @@ try:
 
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
-                    
+
 except Exception as file_error:
     print(f"error initinalising loop: {file_error}")
             
