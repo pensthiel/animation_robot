@@ -78,10 +78,11 @@ try:
         print(filepath2)
         if os.path.exists(filepath2):  # Checking for file existence outside the loop can speed up significantly
             try:
-                if not image is None and not image.get_rect().size == (0, 0):
+                if not image.get_rect().size == (0, 0):
                     image = pygame.image.load(filepath2)
-                    scaled_image = pygame.transform.scale(image, (width, height))
                     print(filepath2 + " loaded")
+                    scaled_image = pygame.transform.scale(image, (width, height))
+                    print(filepath2 + "scaled")
                     screen.blit(scaled_image, (0, 0))
                     pygame.display.flip()
                     print(filepath2 + " displayed")
