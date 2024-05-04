@@ -22,7 +22,6 @@ blue = 2.1
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
-GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # PREVIEW
 GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # quit button
 GPIO.setup(16, GPIO.OUT)  # IR
 
@@ -57,12 +56,8 @@ print('File count in', reload_folder, ':', frame_number)
 
 bell = pygame.mixer.Sound("samples/bell.mp3")
 music = pygame.mixer.Sound("samples/music.mp3")
-#pygame.mixer.Sound.play(bell)
-#pygame.mixer.music.stop()
 print("bell sound file path:", os.path.abspath("samples/bell.mp3"))
 print("music sound file path:", os.path.abspath("samples/music.mp3"))
-#pygame.mixer.Sound.play(music)
-#pygame.mixer.music.stop()
 
 
 
@@ -70,7 +65,7 @@ y_key_pressed = False
 
 frame_to_display = None
 next_button_pressed = False
-preview_button_pressed = False
+
 filepath = None
 filepath2 = None
 
@@ -276,9 +271,7 @@ try:
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
-                print(f": {quit}")
-                break
+            
             
 
 

@@ -83,11 +83,12 @@ try:
                     scaled_image = pygame.transform.scale(image, (width, height))
                     print(filepath2 + " loaded")
                     screen.blit(scaled_image, (0, 0))
+                    pygame.display.flip()
                     print(filepath2 + " displayed")
                     time.sleep(0.1)
 
             except Exception as file_error:
-                print("Error occurred while loading the image.")   # Use error handling to catch and report any issues smoothly.
+               print("Error occurred while loading the image.")   # Use error handling to catch and report any issues smoothly.
 
         else:
             print("can't preview: Directory empty")
