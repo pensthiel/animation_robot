@@ -199,6 +199,7 @@ try:
             led_signal()
             next_button_pressed = False
             print("next_button_pressed = False")
+            y_key_pressed = False
 
         
 
@@ -215,8 +216,7 @@ try:
                     next_button_pressed = True
                     y_key_pressed = True  # Set the variable to True after the action
 
-                if event.type == pygame.KEYUP and event.key == pygame.K_y:
-                    y_key_pressed = False  # Reset the variable when the 'Y' key is released
+
 
 except Exception as file_error:
     print(f"error initinalising loop: {file_error}")
