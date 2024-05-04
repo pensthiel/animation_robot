@@ -155,7 +155,6 @@ def led_signal():
 screen.fill((200, 150, 250))
 LEDS_on()
 
-
 try:
     while True:
         pygame.display.flip()
@@ -169,10 +168,6 @@ try:
         if not debounce(21):
             print("exit button pressed")
             break
-
-        if not debounce(22):
-            print("preview button pressed")
-            preview_button_pressed = True
 
 
         if next_button_pressed:
@@ -220,7 +215,9 @@ try:
 
                 if event.type == pygame.KEYUP and event.key == pygame.K_y:
                     y_key_pressed = False  # Reset the variable when the 'Y' key is released
-
+                    
+except Exception as file_error:
+    print(f"error initinalising loop: {file_error}")
             
             
 
