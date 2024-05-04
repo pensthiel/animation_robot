@@ -9,6 +9,8 @@ import pygame
 from pygame.locals import *
 
 
+folder_name="reload"
+
 zoom = 0.75 # copped image /1
 offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -120  # Change this value as needed
@@ -30,7 +32,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # NUMBER OF FILES IN THE "RELOAD" FOLDER
-reload_folder = os.path.join(script_dir, "reload")
+reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
 for root_dir, cur_dir, files in os.walk(reload_folder):
@@ -86,7 +88,7 @@ try:
                 screen.blit(scaled_image, (0, 0))
                 pygame.display.flip()
                 print(filepath2 + " displayed")
-                time.sleep(0.1)
+                time.sleep(0.2)
 
             except Exception as file_error:
                print(f"Error occurred while loading the image. {file_error}")   # Use error handling to catch and report any issues smoothly.
