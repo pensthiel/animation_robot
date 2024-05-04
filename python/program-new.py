@@ -146,11 +146,10 @@ def debounce(button_pin):
     return GPIO.input(button_pin)
 
 def LEDS_on():
-    # Turn on the LEDs
-    #ADD CODE HERE
+    print(f"LEDS ON")
 
 def LEDS_off():
-  # Turn off the LEDs
+    print(f"LEDS OFF")
 
 
 def led_signal():
