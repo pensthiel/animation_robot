@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 import uhubctl
 
+uhubctl.utils.UHUBCTL_BINARY = "sudo /HEAD/local/bin/uhubctl"
+
+
 hubs = uhubctl.discover_hubs()
 
 for hub in hubs:
