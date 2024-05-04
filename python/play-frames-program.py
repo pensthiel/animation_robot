@@ -34,7 +34,7 @@ filepath2 = None
 preview_number = 0
 
 screen.fill((200, 150, 250))
-LEDS_on()
+
 try:
     filename = f"frame_{frame_number}.jpg"
     print(filename)
@@ -46,7 +46,7 @@ try:
     pygame.display.flip()
 except Exception as load_error:
     print(f"Failed to load image: {load_error}")
-LEDS_on()
+
 
 try:
     while True:
@@ -79,7 +79,6 @@ try:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
-                led_signal()
                 print("q to quit")
                 exit()
 
