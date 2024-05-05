@@ -14,7 +14,7 @@ zoom = 0.75 # copped image /1
 offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -120  # Change this value as needed
 
-exp = 13800
+exp = 500
 gain = 0
 focus = 1
 red = 2.1
@@ -201,7 +201,7 @@ try:
             print("next_button_pressed = False")
             y_key_pressed = False
 
-        
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
@@ -220,8 +220,8 @@ try:
 
 except Exception as file_error:
     print(f"error initinalising loop: {file_error}")
-            
-            
+
+
 
 
 
