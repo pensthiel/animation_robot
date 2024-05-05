@@ -11,8 +11,8 @@ from pygame.locals import *
 
 
 zoom = 1 # copped image /1
-offset_tweak_left = 300  # Change this value as needed
-offset_tweak_top = -1200  # Change this value as needed
+offset_tweak_left = 0  # Change this value as needed
+offset_tweak_top = 0  # Change this value as needed
 
 exp = 2000
 gain = 5
@@ -120,17 +120,17 @@ def save_frame(prefix='frame', file_format='jpg'):
         print(filepath)
 
         # Fill the screen with a black background
-        screen.fill((0))
+        screen.fill((0,0,0))
         pygame.display.flip()  # Update the display
         time.sleep(0.1)
         picam2.capture_metadata()
-        screen.fill((0))
+        screen.fill((0,0,0))
         pygame.display.flip()  # Update the display a second time
         time.sleep(0.1)
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
-        led_signal()
+
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
 
@@ -140,21 +140,9 @@ def debounce(button_pin):
     time.sleep(0.05)  # Adjust the sleep time based on your requirements
     return GPIO.input(button_pin)
 
-def LEDS_on():
-    print(f"LEDS ON")
-
-def LEDS_off():
-    print(f"LEDS OFF")
-
-
-def led_signal():
-    LEDS_off()
-    time.sleep(0.05)
-    LEDS_on()
 
 
 screen.fill((200, 150, 250))
-LEDS_on()
 
 try:
     while True:
@@ -206,7 +194,7 @@ try:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
-                led_signal()
+
                 print("q to quit")
                 exit()
 
