@@ -118,12 +118,12 @@ def save_frame(prefix='frame', file_format='jpg'):
         filepath = os.path.join("reload", filename)
         print(filepath)
 
-        # Fill the screen with a white background
-        screen.fill((255, 255, 255))
+        # Fill the screen with a black background
+        screen.fill((0))
         pygame.display.flip()  # Update the display
         time.sleep(0.1)
         picam2.capture_metadata()
-        screen.fill((255, 255, 255))
+        screen.fill((0))
         pygame.display.flip()  # Update the display a second time
         time.sleep(0.1)
         picam2.capture_file(filepath)
@@ -201,7 +201,7 @@ try:
             print("next_button_pressed = False")
             y_key_pressed = False
 
-
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
@@ -220,8 +220,8 @@ try:
 
 except Exception as file_error:
     print(f"error initinalising loop: {file_error}")
-
-
+            
+            
 
 
 
