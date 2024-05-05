@@ -15,7 +15,7 @@ offset_tweak_left = 160  # Change this value as needed
 offset_tweak_top = -120  # Change this value as needed
 
 exp = 13800
-gain = 2.5
+gain = 0
 focus = 1
 red = 2.1
 blue = 2.1
