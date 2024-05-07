@@ -185,7 +185,6 @@ try:
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
 
-            led_signal()
             next_button_pressed = False
             print("next_button_pressed = False")
             y_key_pressed = False
