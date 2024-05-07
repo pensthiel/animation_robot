@@ -10,8 +10,9 @@ from pygame.locals import *
 
 
 
-zoom = 1 # copped image /1
-offset_tweak_left = 0  # Change this value as needed
+zoom = 0.75 # copped image /1
+zoomVertical = 0.75
+offset_tweak_left = 200  # Change this value as needed
 offset_tweak_top = 0  # Change this value as needed
 
 exp = 2000
@@ -86,16 +87,18 @@ picam2.capture_metadata()
 size = picam2.capture_metadata()['ScalerCrop'][2:]
 full_res = picam2.camera_properties['PixelArraySize']
 picam2.capture_metadata()
-size = [int(s * zoom) for s in size]
+sizeWidth = int(size[0] * zoom)
+sizeHeight = int(size[1] * zoomVertical)
 #offset = [(r - s) // 2 for r, s in zip(full_res, size)]
 #picam2.set_controls({"ScalerCrop": offset + size})
 
 # Calculate offset based on the initial values
-offset_width = (full_res[0] - size[0]) // 2 + offset_tweak_left
-offset_height = (full_res[1] - size[1]) // 2 + offset_tweak_top
+offset_width = (full_res[0] - sizeWidth) // 2 + offset_tweak_left
+offset_height = (full_res[1] - sizeHeight) // 2 + offset_tweak_top
 
 # Create a list with the individual offset values
 offset = [offset_width, offset_height]
+size = [sizeWidth, sizeHeight]
 print(f"offset : {offset}")
 metadata = picam2.capture_metadata()
 controls = {c: metadata[c] for c in ["ExposureTime", "AnalogueGain", "ColourGains","ColourTemperature","LensPosition"]}
@@ -126,7 +129,7 @@ def save_frame(prefix='frame', file_format='jpg'):
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
-        time.sleep(0.5)
+        time.sleep(2)
 
 
     except Exception as error:
