@@ -10,10 +10,13 @@ from pygame.locals import *
 
 
 
-zoom = 0.75 # copped image /1
+zoom = 1 # horizontal
 zoomVertical = 0.75
-offset_tweak_left = 200  # Change this value as needed
+offset_tweak_left = 0  # Change this value as needed
 offset_tweak_top = 0  # Change this value as needed
+moveRight = 0
+moveDown = 0
+imgWidthOffset = 0
 
 exp = 2000
 gain = 3
@@ -125,11 +128,12 @@ def save_frame(prefix='frame', file_format='jpg'):
         # Fill the screen with a black background
         screen.fill((0,0,0))
         pygame.display.flip()  # Update the display
+        time.sleep(1)
         picam2.capture_metadata()
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
-        time.sleep(2)
+        
 
 
     except Exception as error:
@@ -174,8 +178,8 @@ try:
                 if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
                     try:
                         image = pygame.image.load(frame_to_display)
-                        scaled_image = pygame.transform.scale(image, (width, height))
-                        screen.blit(scaled_image, (0, 0))
+                        scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgheightOffset)))
+                        screen.blit(scaled_image, (moveRight, moveDown))
                         pygame.display.flip()
                         print("frame displayed")
 
