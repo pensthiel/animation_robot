@@ -131,11 +131,12 @@ def save_frame(prefix='frame', file_format='jpg'):
         # Fill the screen with a black background
         screen.fill((0,0,0))
         pygame.display.flip()  # Update the display
-        time.sleep(1)
+        time.sleep(0.3)
         picam2.capture_metadata()
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
+        time.sleep(0.2)
 
 
 
