@@ -12,8 +12,8 @@ from pygame.locals import *
 #camera controls
 zoom = 1 # horizontal
 zoomVertical = 1 # vertical
-offset_tweak_left = 0  # Change this value as needed
-offset_tweak_top = 0  # Change this value as needed
+offset_tweak_left = 0  
+offset_tweak_top = 0  
 
 #image display controls
 moveRight = -65
@@ -30,7 +30,7 @@ blue = 0
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NEXT FRAME
 GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # quit button
-GPIO.setup(16, GPIO.OUT)  # IR
+
 
 pygame.mixer.pre_init()
 # Initialize Pygame
@@ -152,6 +152,8 @@ def debounce(button_pin):
 
 
 screen.fill((200, 150, 250))
+pygame.mixer.Sound.play(music)
+
 
 try:
     while True:
@@ -169,6 +171,7 @@ try:
 
 
         if next_button_pressed:
+            pygame.mixer.Sound.stop(music)
             print("next frame starts")
             try:
                 pygame.mixer.Sound.play(bell)
