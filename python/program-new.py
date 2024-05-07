@@ -16,10 +16,10 @@ offset_tweak_left = 0  # Change this value as needed
 offset_tweak_top = 0  # Change this value as needed
 
 #image display controls
-moveRight = -80
-moveDown = -50
-imgWidthOffset = -350
-imgHeightOffset = +200
+moveRight = -65
+moveDown = -20
+imgWidthOffset = -320
+imgHeightOffset = +160
 
 exp = 2000
 gain = 3
