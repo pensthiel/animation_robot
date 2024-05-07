@@ -15,7 +15,7 @@ offset_tweak_left = 0  # Change this value as needed
 offset_tweak_top = 0  # Change this value as needed
 
 exp = 2000
-gain = 5
+gain = 3
 focus = 1
 red = 0
 blue = 0
@@ -122,14 +122,12 @@ def save_frame(prefix='frame', file_format='jpg'):
         # Fill the screen with a black background
         screen.fill((0,0,0))
         pygame.display.flip()  # Update the display
-        time.sleep(0.1)
         picam2.capture_metadata()
-        screen.fill((0,0,0))
-        pygame.display.flip()  # Update the display a second time
-        time.sleep(0.1)
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
+        time.sleep(0.5)
+
 
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
