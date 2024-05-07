@@ -11,15 +11,15 @@ from pygame.locals import *
 
 #camera controls
 zoom = 1 # horizontal
-zoomVertical = 0.85 # vertical
+zoomVertical = 1 # vertical
 offset_tweak_left = 0  # Change this value as needed
 offset_tweak_top = 0  # Change this value as needed
 
 #image display controls
-moveRight = 0
-moveDown = 0
-imgWidthOffset = 0
-imgHeightOffset = 0
+moveRight = -80
+moveDown = -50
+imgWidthOffset = -350
+imgHeightOffset = +200
 
 exp = 2000
 gain = 3
@@ -136,8 +136,8 @@ def save_frame(prefix='frame', file_format='jpg'):
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
-   
-        
+
+
 
 
     except Exception as error:
