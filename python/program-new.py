@@ -213,7 +213,10 @@ def save_frame(prefix='frame', file_format='jpg'):
 
         # Fill the screen with a black background
         screen.fill((0,0,0))
-        os.system("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind")
+        try:
+            os.system(" sudo uhubctl -l 1-1 -a 1")
+        except Exception as e:
+            print("Error playing sound:", e)
         pygame.display.flip()  # Update the display
         time.sleep(0.3)
         picam2.capture_metadata()
@@ -221,7 +224,10 @@ def save_frame(prefix='frame', file_format='jpg'):
         frame_to_display = filepath
         frame_number += 1
         time.sleep(0.2)
-        os.system("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind")
+        try:
+            os.system(" sudo uhubctl -l 1-1 -a 0")
+        except Exception as e:
+            print("Error playing sound:", e)
 
 
 
@@ -239,8 +245,10 @@ def debounce(button_pin):
 
 screen.fill((200, 150, 250))
 pygame.mixer.Sound.play(music)
-os.system("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind")
-
+try:
+    os.system(" sudo uhubctl -l 1-1 -a 0")
+except Exception as e:
+    print("Error playing sound:", e)
 
 try:
     while True:
