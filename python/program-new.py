@@ -297,10 +297,7 @@ def debounce(button_pin):
     return GPIO.input(button_pin)
 
 
-try:
-    display_frame()
-except Exception as e:
-    print("Error playing sound:", e)
+
 
 
 try:
