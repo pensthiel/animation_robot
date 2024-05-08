@@ -79,8 +79,8 @@ frame_number = 0
 for root_dir, cur_dir, files in os.walk(reload_folder):
     frame_number += len(files)
     frame_number -= 1
-    
-firstframe = os.path.join("reload",f"frame_{frame_number}.jpg")
+
+firstframe = os.path.join("reload",f"frame_{frame_number-1}.jpg")
 frame_to_display = firstframe
 
 print('File count in', reload_folder, ':', frame_number)
