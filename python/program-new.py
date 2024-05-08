@@ -16,17 +16,17 @@ from pygame.locals import *
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
 # top left
-TLw = -50
+TLw = -100
 TLh = 0
 # top right
 TRw = 1800
 TRh = 0
 # bottom right
 BRw = 1800
-BRh = 1080
+BRh = 1180
 # bottom left
-BLw = -50
-BLh = 1080
+BLw = -100
+BLh = 1180
 
 #camera controls
 zoom = 1 # horizontal
