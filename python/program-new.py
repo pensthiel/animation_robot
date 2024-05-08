@@ -12,20 +12,21 @@ import pygame
 from pygame.locals import *
 
 # pic size 1536 x 864
+# screen size 1920 x 1080, 16:9
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
 # top left
-TLw = 160
-TLh = -80
+TLw = 0
+TLh = 0
 # top right
-TRw = 1760
-TRh = -80
+TRw = 1920
+TRh = 0
 # bottom right
-BRw = 1760
-BRh = 1160
+BRw = 1920
+BRh = 1080
 # bottom left
-BLw = 160
-BLh = 1160
+BLw = 0
+BLh = 1080
 
 #camera controls
 zoom = 1 # horizontal
