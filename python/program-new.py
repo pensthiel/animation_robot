@@ -16,7 +16,7 @@ from pygame.locals import *
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
 # top left
-TLw = -150
+TLw = -100
 TLh = 0
 # top right
 TRw = 1600
@@ -25,14 +25,14 @@ TRh = 0
 BRw = 1600
 BRh = 1200
 # bottom left
-BLw = -150
+BLw = -100
 BLh = 1200
 
 #camera controls
 zoom = 1 # horizontal
 zoomVertical = 1 # vertical
-offset_tweak_left = 0  
-offset_tweak_top = 0  
+offset_tweak_left = 0
+offset_tweak_top = 0
 
 #image display controls
 moveRight = 0
@@ -281,17 +281,17 @@ try:
                     try:
                         image = pygame.image.load(frame_to_display)
                         scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
-                        
+
                         #added code. see if it works-----------------------------
-                        
+
                         default_rect = scaled_image.get_rect(center=screen.get_rect().center)
                         warped_img = None
-                        
-                        corners = [list(default_rect.topleft), list(default_rect.topright), 
+
+                        corners = [list(default_rect.topleft), list(default_rect.topright),
                                    list(default_rect.bottomright), list(default_rect.bottomleft)]
-                        
+
                         print(corners)
-                        
+
                         # Corner 1
                         corners[0][0] = TLw
                         corners[0][1] = TLh
@@ -307,21 +307,21 @@ try:
                         # Corner 4
                         corners[3][0] = BLw
                         corners[3][1] = BLh
-                        
+
                         print(corners)
-                        
+
                         pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
-                        
+
                         warped_img, warped_pos = warp(
                             scaled_image,
                             pts_to_use,
                             smooth=True,  # dont really know what this does. keeping it on true
                             out=warped_img)
-                        
+
                         #end-----------------------------------------------------
-                        
+
                         screen.blit(warped_img, warped_pos)
-                        
+
                         pygame.display.flip()
                         print("frame displayed")
 
