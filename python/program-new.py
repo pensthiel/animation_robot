@@ -16,7 +16,7 @@ from pygame.locals import *
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
 # top left
-TLw = -104
+TLw = -107
 TLh = -38
 # top right
 TRw = 1568
