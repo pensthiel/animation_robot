@@ -61,6 +61,8 @@ width = screen_info.current_w
 height = screen_info.current_h
 pygame.mouse.set_visible(False)
 
+
+
 # Create a Picamera2 instance
 picam2 = Picamera2()
 print("picam init")
@@ -75,16 +77,11 @@ os.chdir(script_dir)
 reload_folder = os.path.join(script_dir, "reload")
 frame_number = 0
 
-
 for root_dir, cur_dir, files in os.walk(reload_folder):
     frame_number += len(files)
     frame_number -= 1
 
-firstframe = os.path.join("reload",f"frame_{frame_number-1}.jpg")
-frame_to_display = firstframe
-
 print('File count in', reload_folder, ':', frame_number)
-
 
 bell = pygame.mixer.Sound("samples/bell.mp3")
 music = pygame.mixer.Sound("samples/music.mp3")
@@ -210,7 +207,7 @@ def warp(surf: pygame.Surface, warp_pts, smooth=True, out: pygame.Surface = None
 
 def save_frame(prefix='frame', file_format='jpg'):
     try:
-        global frame_number  # Declare both as global
+        global frame_number,frame_to_display  # Declare both as global
         filename = f"{prefix}_{frame_number}.{file_format}"
         print(filename)
         filepath = os.path.join("reload", filename)
@@ -228,68 +225,18 @@ def save_frame(prefix='frame', file_format='jpg'):
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
-        time.sleep(0.1)
+        time.sleep(0.2)
         try:
             os.system(" sudo uhubctl -l 1-1 -a 0")
         except Exception as e:
             print("Error playing sound:", e)
 
 
+
+
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
 
-def display_frame():
-    if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
-        try:
-            image = pygame.image.load(frame_to_display)
-            scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
-
-            #added code. see if it works-----------------------------
-
-            default_rect = scaled_image.get_rect(center=screen.get_rect().center)
-            warped_img = None
-
-            corners = [list(default_rect.topleft), list(default_rect.topright),
-                        list(default_rect.bottomright), list(default_rect.bottomleft)]
-
-            print(corners)
-
-            # Corner 1
-            corners[0][0] = TLw
-            corners[0][1] = TLh
-
-            # Corner 2
-            corners[1][0] = TRw
-            corners[1][1] = TRh
-
-            # Corner 3
-            corners[2][0] = BRw
-            corners[2][1] = BRh
-
-            # Corner 4
-            corners[3][0] = BLw
-            corners[3][1] = BLh
-
-            print(corners)
-
-            pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
-
-            warped_img, warped_pos = warp(
-                scaled_image,
-                pts_to_use,
-                smooth=True,  # dont really know what this does. keeping it on true
-                out=warped_img)
-
-            #end-----------------------------------------------------
-
-            screen.blit(warped_img, warped_pos)
-
-            pygame.display.flip()
-            print("frame displayed")
-
-
-        except Exception as load_error:
-            print(f"Failed to load image: {load_error}")
 
 
 def debounce(button_pin):
@@ -299,7 +246,49 @@ def debounce(button_pin):
 
 
 
+try:
+    image = pygame.image.load(frame_to_display)
+    scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
 
+    #added code. see if it works-----------------------------
+
+    default_rect = scaled_image.get_rect(center=screen.get_rect().center)
+    warped_img = None
+
+    corners = [list(default_rect.topleft), list(default_rect.topright),
+                list(default_rect.bottomright), list(default_rect.bottomleft)]
+
+    print(corners)
+
+    corners[0][0] = TLw
+    corners[0][1] = TLh
+    corners[1][0] = TRw
+    corners[1][1] = TRh
+    corners[2][0] = BRw
+    corners[2][1] = BRh
+    corners[3][0] = BLw
+    corners[3][1] = BLh
+
+    print(corners)
+
+    pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
+
+    warped_img, warped_pos = warp(
+        scaled_image,
+        pts_to_use,
+        smooth=True,  # dont really know what this does. keeping it on true
+        out=warped_img)
+
+    #end-----------------------------------------------------
+
+    screen.blit(warped_img, warped_pos)
+
+    pygame.display.flip()
+    print("frame displayed")
+except Exception as load_error:
+    print(f"Failed to load image: {load_error}")
+
+    
 try:
     os.system(" sudo uhubctl -l 1-1 -a 0")
 except Exception as e:
@@ -321,7 +310,7 @@ try:
 
 
         if next_button_pressed:
-            
+            pygame.mixer.Sound.stop(music)
             print("next frame starts")
             try:
                 pygame.mixer.Sound.play(bell)
@@ -332,7 +321,50 @@ try:
             except Exception as next_frame_error:
                 print(f"couldn't complete save_frame {next_frame_error}")
             try:
-                display_frame()
+                if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
+                    try:
+                        image = pygame.image.load(frame_to_display)
+                        scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
+
+                        #added code. see if it works-----------------------------
+
+                        default_rect = scaled_image.get_rect(center=screen.get_rect().center)
+                        warped_img = None
+
+                        corners = [list(default_rect.topleft), list(default_rect.topright),
+                                   list(default_rect.bottomright), list(default_rect.bottomleft)]
+
+                        print(corners)
+
+                        corners[0][0] = TLw
+                        corners[0][1] = TLh
+                        corners[1][0] = TRw
+                        corners[1][1] = TRh
+                        corners[2][0] = BRw
+                        corners[2][1] = BRh
+                        corners[3][0] = BLw
+                        corners[3][1] = BLh
+
+                        print(corners)
+
+                        pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
+
+                        warped_img, warped_pos = warp(
+                            scaled_image,
+                            pts_to_use,
+                            smooth=True,  # dont really know what this does. keeping it on true
+                            out=warped_img)
+
+                        #end-----------------------------------------------------
+
+                        screen.blit(warped_img, warped_pos)
+
+                        pygame.display.flip()
+                        print("frame displayed")
+
+
+                    except Exception as load_error:
+                        print(f"Failed to load image: {load_error}")
 
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.
