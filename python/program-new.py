@@ -63,8 +63,8 @@ pygame.mouse.set_visible(False)
 # Create a Picamera2 instance
 picam2 = Picamera2()
 print("picam init")
-print(screen_size)
-print(width, height)
+print(f"{screen_size}")
+print(f"{width}, {height}")
 
 # Set the current working directory to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
