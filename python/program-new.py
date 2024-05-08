@@ -61,8 +61,6 @@ width = screen_info.current_w
 height = screen_info.current_h
 pygame.mouse.set_visible(False)
 
-
-
 # Create a Picamera2 instance
 picam2 = Picamera2()
 print("picam init")
@@ -245,50 +243,8 @@ def debounce(button_pin):
 
 
 
+screen.fill((200, 150, 250))
 
-try:
-    image = pygame.image.load(frame_to_display)
-    scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
-
-    #added code. see if it works-----------------------------
-
-    default_rect = scaled_image.get_rect(center=screen.get_rect().center)
-    warped_img = None
-
-    corners = [list(default_rect.topleft), list(default_rect.topright),
-                list(default_rect.bottomright), list(default_rect.bottomleft)]
-
-    print(corners)
-
-    corners[0][0] = TLw
-    corners[0][1] = TLh
-    corners[1][0] = TRw
-    corners[1][1] = TRh
-    corners[2][0] = BRw
-    corners[2][1] = BRh
-    corners[3][0] = BLw
-    corners[3][1] = BLh
-
-    print(corners)
-
-    pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
-
-    warped_img, warped_pos = warp(
-        scaled_image,
-        pts_to_use,
-        smooth=True,  # dont really know what this does. keeping it on true
-        out=warped_img)
-
-    #end-----------------------------------------------------
-
-    screen.blit(warped_img, warped_pos)
-
-    pygame.display.flip()
-    print("frame displayed")
-except Exception as load_error:
-    print(f"Failed to load image: {load_error}")
-
-    
 try:
     os.system(" sudo uhubctl -l 1-1 -a 0")
 except Exception as e:
@@ -377,7 +333,7 @@ try:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
-
+                os.system(" sudo uhubctl -l 1-1 -a 1")
                 print("q to quit")
                 exit()
 
@@ -403,6 +359,7 @@ except KeyboardInterrupt:
 
 finally:
     # Release resources
+    os.system(" sudo uhubctl -l 1-1 -a 1")
     pygame.mixer.quit()
     GPIO.cleanup()
     picam2.stop()
