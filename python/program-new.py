@@ -216,18 +216,17 @@ def save_frame(prefix='frame', file_format='jpg'):
         try:
             os.system(" sudo uhubctl -l 1-1 -a 1")
         except Exception as e:
-            print("Error playing sound:", e)
+            print("Error turning on usb:", e)
         pygame.display.flip()  # Update the display
-        time.sleep(0.2)
+        time.sleep(0.3)
         picam2.capture_metadata()
         picam2.capture_file(filepath)
         frame_to_display = filepath
         frame_number += 1
-        time.sleep(0.2)
         try:
             os.system(" sudo uhubctl -l 1-1 -a 0")
         except Exception as e:
-            print("Error playing sound:", e)
+            print("Error turning off usb", e)
 
 
 
