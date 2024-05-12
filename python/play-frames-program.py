@@ -32,9 +32,7 @@ os.chdir(script_dir)
 reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
-for root_dir, cur_dir, files in os.walk(reload_folder):
-    frame_number += len(files)
-    frame_number -= 1
+
 
 print('File count in', reload_folder, ':', frame_number)
 
@@ -51,25 +49,15 @@ preview_number = 0
 
 screen.fill((200, 150, 250))
 
-try:
-    filename = f"frame_{frame_number}.jpg"
-    print(filename)
-    filepath = os.path.join("reload", filename)
-    print(filepath)
-    image = pygame.image.load(filepath)
-    scaled_image = pygame.transform.scale(image, (width, height))
-    screen.blit(scaled_image, (0, 0))
-    pygame.display.flip()
-
-
-except Exception as load_error:
-    print(f"Failed to load image: {load_error}")
-
 
 try:
     while True:
         
 
+        for root_dir, cur_dir, files in os.walk(reload_folder):
+            frame_number += len(files)
+            frame_number -= 1
+            print('File count in', reload_folder, ':', frame_number)
 
         print("preview starts")
         filepath2 = os.path.join("reload", f"frame_{preview_number}.jpg")
@@ -80,9 +68,11 @@ try:
                 
                 image = pygame.image.load(filepath2)
                 print(filepath2 + " loaded")
-                scaled_image = pygame.transform.scale(image, (width, height))
-                print(filepath2 + "scaled")
-                screen.blit(scaled_image, (0, 0))
+                ratio = image.get_width() / image.get_height()
+                imgwidth = int(height * ratio)
+                scaled_image = pygame.transform.scale(image, (imgwidth, height))
+                margin = (width - imgwidth) // 2
+                screen.blit(scaled_image, (margin, 0))
                 pygame.display.flip()
                 print(filepath2 + " displayed")
                 time.sleep(delay)
@@ -92,12 +82,15 @@ try:
 
         else:
             print("can't preview: Directory empty")
-            preview_button_pressed = False
+
         try:
             if preview_number == frame_number:
-                preview_number = 0
-                pygame.mixer.stop()
-                preview_button_pressed = False
+                if frame_number >= 151:
+                    preview_number = frame_number -150
+                else:
+                    preview_number = 0
+
+            pygame.mixer.stop()
         except Exception as e:
             print(f"error stopping preview: {e}")
 
