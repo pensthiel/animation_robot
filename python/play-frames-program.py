@@ -48,6 +48,8 @@ preview_number = 0
 
 
 screen.fill((200, 150, 250))
+time.sleep(delay)
+screen.fill((0, 0, 0))
 
 
 try:
@@ -55,7 +57,7 @@ try:
         
 
         for root_dir, cur_dir, files in os.walk(reload_folder):
-            frame_number += len(files)
+            frame_number = len(files)
             frame_number -= 1
             print('File count in', reload_folder, ':', frame_number)
 
@@ -85,7 +87,7 @@ try:
 
         try:
             if preview_number == frame_number:
-                if frame_number >= 151:
+                if frame_number > 151:
                     preview_number = frame_number -150
                 else:
                     preview_number = 0
