@@ -61,7 +61,7 @@ screen = pygame.display.set_mode(screen_size, pygame.FULLSCREEN) # Set display s
 screen_info = pygame.display.Info() # Get the current display info
 width = screen_info.current_w
 height = screen_info.current_h
-pygame.mouse.set_visible(False)
+
 
 # Create a Picamera2 instance
 picam2 = Picamera2()
@@ -245,7 +245,7 @@ def debounce(button_pin):
 
 
 screen.fill((200, 150, 250))
-
+pygame.mouse.set_visible(False)
 try:
     os.system(" sudo uhubctl -l 1-1 -a 0")
 except Exception as e:

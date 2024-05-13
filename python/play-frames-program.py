@@ -32,11 +32,17 @@ os.chdir(script_dir)
 reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
-exagon = pygame.image.load(os.path.join("samples","exagon.png"))
-ratio2 = exagon.get_width() / exagon.get_height()
-exawidth = int(height * ratio2)
-scaled_exa = pygame.transform.scale(exagon, (exawidth, height))
-margin2 = (width - exawidth) // 2
+exagon = pygame.image.load(os.path.join("samples", "exagon.png"))
+
+# Calculate the scale factor to fit the exagon to the screen width while maintaining aspect ratio
+scale_factor = height / exagon.get_height()
+print(scale_factor)
+
+# Scale the exagon image
+scaled_exa = pygame.transform.rotozoom(exagon, 0, scale_factor)
+
+# Calculate the margin to center the scaled exagon horizontally on the screen
+margin2 = (width - scaled_exa.get_width()) // 2
 
 
 
@@ -55,8 +61,8 @@ preview_number = 0
 
 
 
-screen.fill((60,80,180))
-
+screen.fill((0,0,0))
+pygame.mouse.set_visible(False)
 pygame.display.flip()
 
 
@@ -78,10 +84,17 @@ try:
                 
                 image = pygame.image.load(filepath2)
                 print(filepath2 + " loaded")
-                ratio = image.get_width() / image.get_height()
-                imgwidth = int(height * ratio)
-                scaled_image = pygame.transform.scale(image, (imgwidth, height))
+                # Calculate the scale factor to fit the image to the screen height while maintaining aspect ratio
+                scale_factor = height / image.get_height()
+                
+                # Scale the image
+                scaled_image = pygame.transform.rotozoom(image, 0, scale_factor)
+                
+                # Calculate the margin to center the scaled image horizontally on the screen
+                imgwidth, imgheight = scaled_image.get_size()
                 margin = (width - imgwidth) // 2
+                
+                # Blit the scaled image and the scaled exagon onto the screen
                 screen.blit(scaled_image, (margin, 0))
                 screen.blit(scaled_exa, (margin2, 0))
                 pygame.display.flip()
