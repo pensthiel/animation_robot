@@ -8,6 +8,7 @@ import time
 import pygame
 from pygame.locals import *
 
+film_lenght = 75 # Number of frames to play 5 fps, 75 frames = 15 seconds
 
 folder_name="reload" # Folder name to load images from
 
@@ -109,8 +110,8 @@ try:
 
         try:
             if preview_number == frame_number:
-                if frame_number > 51:
-                    preview_number = frame_number -50
+                if frame_number > (film_lenght+1):
+                    preview_number = frame_number -film_lenght
                 else:
                     preview_number = 0
 
