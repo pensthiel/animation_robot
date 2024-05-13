@@ -236,15 +236,63 @@ def save_frame(prefix='frame', file_format='jpg'):
     except Exception as error:
         print(f"Failed to take and save frame: {error}")
 
+def display_frame(theframe):
+    try:
+        image = pygame.image.load(theframe)
+        scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
 
+        #added code. see if it works-----------------------------
+
+        default_rect = scaled_image.get_rect(center=screen.get_rect().center)
+        warped_img = None
+
+        corners = [list(default_rect.topleft), list(default_rect.topright),
+                    list(default_rect.bottomright), list(default_rect.bottomleft)]
+
+        print(corners)
+
+        corners[0][0] = TLw
+        corners[0][1] = TLh
+        corners[1][0] = TRw
+        corners[1][1] = TRh
+        corners[2][0] = BRw
+        corners[2][1] = BRh
+        corners[3][0] = BLw
+        corners[3][1] = BLh
+
+        print(corners)
+
+        pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
+
+        warped_img, warped_pos = warp(
+            scaled_image,
+            pts_to_use,
+            smooth=True,  # dont really know what this does. keeping it on true
+            out=warped_img)
+
+        #end-----------------------------------------------------
+
+        screen.blit(warped_img, warped_pos)
+
+        pygame.display.flip()
+        print("frame displayed")
+
+
+    except Exception as load_error:
+        print(f"Failed to load image: {load_error}")
 
 def debounce(button_pin):
     time.sleep(0.05)  # Adjust the sleep time based on your requirements
     return GPIO.input(button_pin)
 
+firstframe = (f"reload/frame_{(frame_number-1)}.jpg")
 
+screen.fill((0, 0, 0))
+try:
+    display_frame(firstframe)
+except Exception as e:
+    print("Error displaying first frame:", e)
 
-screen.fill((200, 150, 250))
 pygame.mouse.set_visible(False)
 try:
     os.system(" sudo uhubctl -l 1-1 -a 0")
@@ -279,49 +327,7 @@ try:
                 print(f"couldn't complete save_frame {next_frame_error}")
             try:
                 if os.path.exists(frame_to_display):  # Checking for file existence outside the loop can speed things up significantly
-                    try:
-                        image = pygame.image.load(frame_to_display)
-                        scaled_image = pygame.transform.scale(image, ((width + imgWidthOffset), (height + imgHeightOffset)))
-
-                        #added code. see if it works-----------------------------
-
-                        default_rect = scaled_image.get_rect(center=screen.get_rect().center)
-                        warped_img = None
-
-                        corners = [list(default_rect.topleft), list(default_rect.topright),
-                                   list(default_rect.bottomright), list(default_rect.bottomleft)]
-
-                        print(corners)
-
-                        corners[0][0] = TLw
-                        corners[0][1] = TLh
-                        corners[1][0] = TRw
-                        corners[1][1] = TRh
-                        corners[2][0] = BRw
-                        corners[2][1] = BRh
-                        corners[3][0] = BLw
-                        corners[3][1] = BLh
-
-                        print(corners)
-
-                        pts_to_use = corners #you can manually change the values of the corners for now. example had fancy click and drag stuff.
-
-                        warped_img, warped_pos = warp(
-                            scaled_image,
-                            pts_to_use,
-                            smooth=True,  # dont really know what this does. keeping it on true
-                            out=warped_img)
-
-                        #end-----------------------------------------------------
-
-                        screen.blit(warped_img, warped_pos)
-
-                        pygame.display.flip()
-                        print("frame displayed")
-
-
-                    except Exception as load_error:
-                        print(f"Failed to load image: {load_error}")
+                    display_frame(frame_to_display)
 
             except Exception as file_error:
                 print("Error occurred while loading image.")  # Use error handling to catch and report any issues smoothly.

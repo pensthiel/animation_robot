@@ -109,8 +109,8 @@ try:
 
         try:
             if preview_number == frame_number:
-                if frame_number > 151:
-                    preview_number = frame_number -150
+                if frame_number > 51:
+                    preview_number = frame_number -50
                 else:
                     preview_number = 0
 
