@@ -22,6 +22,7 @@ screen = pygame.display.set_mode(screen_size, pygame.FULLSCREEN) # Set display s
 screen_info = pygame.display.Info() # Get the current display info
 width = screen_info.current_w
 height = screen_info.current_h
+pygame.mouse.set_visible(False)
 
 
 # Set the current working directory to the script's location
@@ -33,7 +34,7 @@ reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
 exagon = pygame.image.load(os.path.join("samples","exagon.png"))
-pygame.transform.scale(exagon, ((height * (exagon.get_width()/exagon.get_height())),height))
+pygame.transform.scale(exagon, ((width * (exagon.get_height()/exagon.get_width())),height))
 exawidth = exagon.get_width()
 examargin =  (width - exawidth) / 2
 
