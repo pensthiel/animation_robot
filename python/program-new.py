@@ -21,7 +21,7 @@ allH = -9
 TLw = (-97 + allW)
 TLh = (-58 + allH)
 # top right
-TRw = (15780 + allW)
+TRw = (1580 + allW)
 TRh = (-79 + allH)
 # bottom right
 BRw = (1525 + allW)
