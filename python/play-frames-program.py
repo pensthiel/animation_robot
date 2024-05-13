@@ -58,7 +58,7 @@ preview_number = 0
 
 
 screen.fill((120,80,30))
-screen.blit(exagon, (0,examargin))
+screen.blit(exagon, (examargin))
 pygame.display.flip()
 screen.fill((0, 0, 0))
 
