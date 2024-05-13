@@ -22,7 +22,6 @@ screen = pygame.display.set_mode(screen_size, pygame.FULLSCREEN) # Set display s
 screen_info = pygame.display.Info() # Get the current display info
 width = screen_info.current_w
 height = screen_info.current_h
-pygame.mouse.set_visible(False)
 
 
 # Set the current working directory to the script's location
@@ -34,11 +33,13 @@ reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
 exagon = pygame.image.load(os.path.join("samples","exagon.png"))
-pygame.transform.scale(exagon, ((width/2),(height/2)))
-exaheight = exagon.get_height()
+pygame.transform.scale(exagon, (width, height))
 exawidth = exagon.get_width()
-examargin =  ((height - exaheight) / 2, (width - exawidth) / 2)
-
+examargin =  (width - exawidth) / 2
+ratio2 = exagon.get_width() / exagon.get_height()
+exawidth = int(height * ratio2)
+scaled_image = pygame.transform.scale(exagon, ((exawidth/2), (height/2)))
+margin2 = (width - (exawidth/2)) // 2
 
 
 
@@ -58,7 +59,7 @@ preview_number = 0
 
 
 screen.fill((120,80,30))
-screen.blit(exagon, (examargin))
+screen.blit(exagon, (examargin, 0))
 pygame.display.flip()
 screen.fill((0, 0, 0))
 
@@ -81,11 +82,11 @@ try:
                 image = pygame.image.load(filepath2)
                 print(filepath2 + " loaded")
                 ratio = image.get_width() / image.get_height()
-                imgwidth = int(height/2 * ratio)
-                scaled_image = pygame.transform.scale(image, (imgwidth, height/2))
-                margin = ((width - imgwidth) // 2, (height - height/2) // 2)
-                screen.blit(scaled_image, (margin))
-                screen.blit(exagon, (examargin))
+                imgwidth = int(height * ratio)
+                scaled_image = pygame.transform.scale(image, ((imgwidth/2), (height/2)))
+                margin = (width - (imgwidth/2)) // 2
+                screen.blit(scaled_image, (margin, 0))
+                screen.blit(exagon, (margin2, 0))
                 pygame.display.flip()
                 print(filepath2 + " displayed")
                 time.sleep(delay)
