@@ -33,8 +33,10 @@ reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
 exagon = pygame.image.load(os.path.join("samples","exagon.png"))
+pygame.transform.scale(exagon, ((height * (exagon.get_width()/exagon.get_height())),height))
 exawidth = exagon.get_width()
 examargin =  (width - exawidth) / 2
+
 
 
 
