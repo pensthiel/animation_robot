@@ -58,10 +58,10 @@ preview_number = 0
 
 
 
-screen.fill((120,80,30))
-screen.blit(exagon, (examargin, 0))
+screen.fill((0,0,0))
+
 pygame.display.flip()
-screen.fill((0, 0, 0))
+
 
 try:
     while True:
