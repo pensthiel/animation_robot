@@ -34,9 +34,10 @@ reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
 exagon = pygame.image.load(os.path.join("samples","exagon.png"))
-pygame.transform.scale(exagon, ((width * (exagon.get_height()/exagon.get_width())),height))
+pygame.transform.scale(exagon, ((width/2),(height/2)))
+exaheight = exagon.get_height()
 exawidth = exagon.get_width()
-examargin =  (width - exawidth) / 2
+examargin =  ((height - exaheight) / 2, (width - exawidth) / 2)
 
 
 
@@ -57,7 +58,7 @@ preview_number = 0
 
 
 screen.fill((120,80,30))
-screen.blit(exagon, (examargin, 0))
+screen.blit(exagon, (0,examargin))
 pygame.display.flip()
 screen.fill((0, 0, 0))
 
@@ -80,11 +81,11 @@ try:
                 image = pygame.image.load(filepath2)
                 print(filepath2 + " loaded")
                 ratio = image.get_width() / image.get_height()
-                imgwidth = int(height * ratio)
-                scaled_image = pygame.transform.scale(image, (imgwidth, height))
-                margin = (width - imgwidth) // 2
-                screen.blit(scaled_image, (margin, 0))
-                screen.blit(exagon, (examargin, 0))
+                imgwidth = int(height/2 * ratio)
+                scaled_image = pygame.transform.scale(image, (imgwidth, height/2))
+                margin = ((width - imgwidth) // 2, (height - height/2) // 2)
+                screen.blit(scaled_image, (margin))
+                screen.blit(exagon, (examargin))
                 pygame.display.flip()
                 print(filepath2 + " displayed")
                 time.sleep(delay)
