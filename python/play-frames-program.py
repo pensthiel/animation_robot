@@ -32,6 +32,11 @@ os.chdir(script_dir)
 reload_folder = os.path.join(script_dir, folder_name)
 frame_number = 0
 
+exagon = pygame.image.load(os.path.join("samples","exagon.png"))
+exawidth = exagon.get_width()
+examargin =  (width - exawidth) / 2
+
+
 
 
 print('File count in', reload_folder, ':', frame_number)
@@ -47,10 +52,11 @@ filepath2 = None
 preview_number = 0
 
 
-screen.fill((200, 150, 250))
-time.sleep(delay)
-screen.fill((0, 0, 0))
 
+screen.fill((120,80,30))
+screen.blit(exagon, (examargin, 0))
+pygame.display.flip()
+screen.fill((0, 0, 0))
 
 try:
     while True:
@@ -75,6 +81,7 @@ try:
                 scaled_image = pygame.transform.scale(image, (imgwidth, height))
                 margin = (width - imgwidth) // 2
                 screen.blit(scaled_image, (margin, 0))
+                screen.blit(exagon, (examargin, 0))
                 pygame.display.flip()
                 print(filepath2 + " displayed")
                 time.sleep(delay)
