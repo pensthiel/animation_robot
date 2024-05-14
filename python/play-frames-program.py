@@ -8,7 +8,7 @@ import time
 import pygame
 from pygame.locals import *
 
-film_lenght = 75 # Number of frames to play 5 fps, 75 frames = 15 seconds
+film_lenght = 25 # Number of frames to play 5 fps, 75 frames = 15 seconds
 
 folder_name="reload" # Folder name to load images from
 
