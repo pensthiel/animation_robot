@@ -15,8 +15,8 @@ from pygame.locals import *
 # screen size 1920 x 1080, 16:9
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
-allW = 17
-allH = -9
+allW = 27
+allH = -12
 # top left
 TLw = (-97 + allW)
 TLh = (-58 + allH)
