@@ -18,17 +18,17 @@ from pygame.locals import *
 allW = 27
 allH = -125
 # top left
-TLw = (-97 + allW)
+TLw = (-98 + allW)
 TLh = (-58 + allH)
 # top right
-TRw = (1620 + allW)
-TRh = (-89 + allH)
+TRw = (1600 + allW)
+TRh = (-90 + allH)
 # bottom right
-BRw = (1515 + allW)
-BRh = (1182 + allH)
+BRw = (1523 + allW)
+BRh = (1180 + allH)
 # bottom left
-BLw = (-1 + allW)
-BLh = (1168 + allH)
+BLw = (1 + allW)
+BLh = (1176 + allH)
 
 #camera controls
 zoom = 1 # horizontal
