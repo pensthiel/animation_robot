@@ -15,24 +15,27 @@ from pygame.locals import *
 # screen size 1920 x 1080, 16:9
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
-allW = 27
-allH = -125
+
+cropzoom = 0.55
+#at 0.55, image size is W 4608 H 2592
+allW = -200
+allH = -50
 # top left
-TLw = (-98 + allW)
-TLh = (-58 + allH)
+TLw = (0 + allW)
+TLh = (0 + allH)
 # top right
-TRw = (1600 + allW)
-TRh = (-90 + allH)
+TRw = (1920 + allW)
+TRh = (0 + allH)
 # bottom right
-BRw = (1523 + allW)
-BRh = (1180 + allH)
+BRw = (1920 + allW)
+BRh = (1080 + allH)
 # bottom left
-BLw = (1 + allW)
-BLh = (1176 + allH)
+BLw = (0 + allW)
+BLh = (1080 + allH)
 
 #camera controls
-zoom = 1 # horizontal
-zoomVertical = 1 # vertical
+zoom = cropzoom # horizontal
+zoomVertical = cropzoom # vertical
 offset_tweak_left = 0
 offset_tweak_top = 0
 
