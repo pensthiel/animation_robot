@@ -15,20 +15,20 @@ from pygame.locals import *
 # screen size 1920 x 1080, 16:9
 #[(160, -80), (1760, -80), (1760, 1160), (160, 1160)] rectangle
 
-allW = 58
-allH = -38
+allW = 27
+allH = -125
 # top left
-TLw = (-97 + allW)
+TLw = (-98 + allW)
 TLh = (-58 + allH)
 # top right
-TRw = (1630 + allW)
-TRh = (-79 + allH)
+TRw = (1600 + allW)
+TRh = (-90 + allH)
 # bottom right
-BRw = (1515 + allW)
-BRh = (1162 + allH)
+BRw = (1523 + allW)
+BRh = (1180 + allH)
 # bottom left
-BLw = (-1 + allW)
-BLh = (1148 + allH)
+BLw = (1 + allW)
+BLh = (1176 + allH)
 
 #camera controls
 zoom = 1 # horizontal
